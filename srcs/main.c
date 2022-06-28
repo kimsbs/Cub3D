@@ -13,9 +13,17 @@ void check_info(info data)
         printf("%s\n", data.map[i]);
 }
 
-void Leak_check(void)
+void free_all_data(info data)
 {
-    system("leaks cub3D");
+    int i;
+
+    i = -1;
+    while(++i < 4)
+        free(data.tile[i]);
+    i = -1;
+    while(++i < data.height)
+        free(data.map[i]);
+    free(data.map);
 }
 
 int main(int argc, char **argv)
@@ -31,7 +39,6 @@ int main(int argc, char **argv)
     data = init_data(fd);
     close(fd);    
     check_info(data);
-
-    //Leak_check();
+    free_all_data(data);
     return (0);
 }
