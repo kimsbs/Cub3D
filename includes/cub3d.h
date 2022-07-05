@@ -8,6 +8,8 @@
 # include <stdio.h> // 나중에 삭제할것
 
 typedef struct info{
+    int     p_xpos;
+    int     p_ypos;
     int     surround;
     int     width;
     int     height;

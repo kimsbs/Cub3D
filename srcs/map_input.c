@@ -56,13 +56,13 @@ void    alloc_map(const char *tmp, info *data)
 
     data->map = (char **)malloc(sizeof(char *) * (data->height + 1));
     if(!data->map)
-        exit_with_str("MALLOC ERROR\n", -1);
+        exit_with_str("malloc error\n", -1);
     y = -1;
     while (++y < data->height)
     {
         data->map[y] = (char *)malloc(sizeof(char) * (data->width + 1));
         if(!data->map[y])
-            exit_with_str("MALLOC ERROR\n", -1);
+            exit_with_str("malloc error\n", -1);
     }
     data->map[y] = 0;
     cpy_map(tmp, data);
