@@ -39,6 +39,9 @@ int main(int argc, char **argv)
     data = init_data(fd);
     close(fd);    
     check_info(data);
+    //Add my function
+    
+
     free_all_data(data);
     return (0);
 }
