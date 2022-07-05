@@ -18,6 +18,14 @@ void put_tile_data(char **tmp, info *data, int type)
     free(*tmp);
     *tmp = dummy;
 }
+void remove_enter(char **tmp)
+{
+    char *dummy;
+
+    dummy = ft_strdup(*tmp + 1);
+    free(*tmp);
+    *tmp = dummy;
+}
 
 void alloc_tile(char **tmp, info *data)
 {
@@ -28,7 +36,12 @@ void alloc_tile(char **tmp, info *data)
     cnt = -1;
     while (++cnt < 4)
     {
-        if (ft_strncmp(*tmp, "NO", 2) && !data->tile[0])
+        if(*tmp[0] == '\n')
+        {
+            --cnt;
+            remove_enter(tmp);
+        }
+        else if (ft_strncmp(*tmp, "NO", 2) && !data->tile[0])
             put_tile_data(tmp, data, 0);
         else if (ft_strncmp(*tmp, "SO", 2) && !data->tile[1])
             put_tile_data(tmp, data, 1);
@@ -82,7 +95,7 @@ void put_fc_data(char **tmp, int data[3])
     *tmp = dummy;
 }
 
-void alloc_fc(char **tmp, info *data)
+void fc_init(info *data)
 {
     int cnt;
 
@@ -92,10 +105,22 @@ void alloc_fc(char **tmp, info *data)
         data->floor[cnt] = 0;
         data->celing[cnt] = 0;
     }
+}
+
+void alloc_fc(char **tmp, info *data)
+{
+    int cnt;
+
+    fc_init(data);
     cnt = -1;
-    while (++cnt < 2)
+    while (++cnt < 2 && *tmp[0])
     {
-        if (*tmp[0] == 'F' && !data->floor[3])
+        if(*tmp[0] == '\n')
+        {
+            --cnt;
+            remove_enter(tmp);
+        }
+        else if (*tmp[0] == 'F' && !data->floor[3])
         {
             put_fc_data(tmp, data->floor);
             data->floor[3] = 1;
