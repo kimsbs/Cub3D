@@ -16,6 +16,7 @@
 # define K_ESC 53
 
 #define X_EVENT_KEY_PRESS	2
+#define X_EVENT_KEY_RELEASE	3
 #define X_EVENT_KEY_EXIT	17
 #define mapWidth 24
 #define mapHeight 24
@@ -25,6 +26,29 @@ typedef struct s_queue{
     int y;
     struct s_queue *next;
 }s_queue;
+
+typedef struct	s_img
+{
+	void	*img;
+	int		*data;
+
+	int		size_l;
+	int		bpp;
+	int		endian;
+	int		img_width;
+	int		img_height;
+}				t_img;
+
+typedef struct	s_key
+{
+	int		key_w;
+	int		key_a;
+	int		key_d;
+	int		key_s;
+	int		key_left;
+	int		key_right;
+}				t_key;
+
 
 typedef struct info{
 	int		**visited;
@@ -48,6 +72,10 @@ typedef struct info{
 	int     celing[4];
 
 	// 내껏 헤
+	int		buf[480][640];
+	int		**texture;
+	t_img		img;
+	t_key		key;
 	void*		mlx;
 	void*		win;
 	int			win_width;

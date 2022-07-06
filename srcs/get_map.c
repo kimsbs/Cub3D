@@ -2,6 +2,7 @@
 
 void position_alloc(info *data, int y, int x, int *cnt)
 {
+    data->now_dir = data->map[y][x];
     data->p_ypos = y;
     data->p_xpos = x;
     (*cnt)++;
