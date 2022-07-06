@@ -1,8 +1,8 @@
 # include "../includes/cub3d.h"
 
-s_queue *get_last(s_queue *head)
+t_queue *get_last(t_queue *head)
 {
-    s_queue *node;
+    t_queue *node;
 
     node = head;
     while (node->next)
@@ -10,12 +10,12 @@ s_queue *get_last(s_queue *head)
     return (node);
 }
 
-void enqueue(s_queue **head, int x, int y)
+void enqueue(t_queue **head, int x, int y)
 {
-    s_queue *last;
-    s_queue *new_node;
+    t_queue *last;
+    t_queue *new_node;
 
-    new_node = (s_queue *)malloc(sizeof(s_queue));
+    new_node = (t_queue *)malloc(sizeof(t_queue));
     if (!new_node)
         print_error("enqueue_error\n");
     new_node->x = x;
@@ -30,16 +30,16 @@ void enqueue(s_queue **head, int x, int y)
     }
 }
 
-void dequeue(s_queue **head)
+void dequeue(t_queue **head)
 {
-    s_queue *remove;
+    t_queue *remove;
 
     remove = *head;
     *head = remove->next;
     free(remove);
 }
 
-void bst(info *data, s_queue *head, int x, int y)
+void bst(t_info *data, t_queue *head, int x, int y)
 {
     if (y < 0 || y >= data->height || x < 0 || x >= data->width)
         return ;
@@ -58,7 +58,7 @@ void bst(info *data, s_queue *head, int x, int y)
         print_error("map has space area or not surrounded by 1\n");
 }
 
-void visitied_init(info *data)
+void visitied_init(t_info *data)
 {
     int y;
     int x;
@@ -78,9 +78,23 @@ void visitied_init(info *data)
     }
 }
 
-void map_check(info *data)
+void free_visited(t_info *data)
 {
-    s_queue *head;
+    int y;
+    int x;
+
+    y = -1;
+    while (++y < data->height)
+    {
+        x = -1;
+        while(++x < data->width)
+            free(data->visited[y][x]); 
+    }
+}
+
+void map_check(t_info *data)
+{
+    t_queue *head;
 
     visitied_init(data);
     head = NULL;
@@ -95,4 +109,5 @@ void map_check(info *data)
         dequeue(&head);
     }
     data->surround = 1;
+    free_visited(data);
 }

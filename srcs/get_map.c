@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-void position_alloc(info *data, int y, int x, int *cnt)
+void position_alloc(t_info *data, int y, int x, int *cnt)
 {
     data->now_dir = data->map[y][x];
     data->p_ypos = y;
@@ -8,7 +8,7 @@ void position_alloc(info *data, int y, int x, int *cnt)
     (*cnt)++;
 }
 
-void check_map(info *data, int cnt)
+void check_map(t_info *data, int cnt)
 {
     int y;
     int x;
@@ -35,7 +35,7 @@ void check_map(info *data, int cnt)
         print_error("map contain odd data\n");
 }
 
-void mapdata_to_info(char *tmp, info *data)
+void mapdata_to_info(char *tmp, t_info *data)
 {
     //타일 종류별 할당
     alloc_tile(&tmp, data);
@@ -51,9 +51,9 @@ void mapdata_to_info(char *tmp, info *data)
     map_check(data);
 }
 
-info init_data(int fd)
+t_info init_data(int fd)
 {
-    info data;
+    t_info data;
     char buf[129];
     char *tmp;
     int rd_len;

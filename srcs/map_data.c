@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-void put_tile_data(char **tmp, info *data, int type)
+void put_tile_data(char **tmp, t_info *data, int type)
 {
     int space_len;
     int enter_len;
@@ -31,7 +31,7 @@ void remove_enter(char **tmp)
     *tmp = dummy;
 }
 
-void alloc_tile(char **tmp, info *data)
+void alloc_tile(char **tmp, t_info *data)
 {
     int cnt;
     cnt = -1;
@@ -104,7 +104,7 @@ void put_fc_data(char **tmp, int data[3])
     *tmp = dummy;
 }
 
-void fc_init(info *data)
+void fc_init(t_info *data)
 {
     int cnt;
 
@@ -116,7 +116,7 @@ void fc_init(info *data)
     }
 }
 
-void alloc_fc(char **tmp, info *data)
+void alloc_fc(char **tmp, t_info *data)
 {
     int cnt;
 

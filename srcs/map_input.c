@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-void    get_map_info(const char *tmp, info *data)
+void    get_map_info(const char *tmp, t_info *data)
 {
     int move;
     int len;
@@ -27,7 +27,7 @@ void    get_map_info(const char *tmp, info *data)
         data->height++;
 }
 
-void    cpy_map(const char *tmp, info *data)
+void    cpy_map(const char *tmp, t_info *data)
 {
     int y;
     int x;
@@ -50,7 +50,7 @@ void    cpy_map(const char *tmp, info *data)
     }
 }
 
-void    alloc_map(const char *tmp, info *data)
+void    alloc_map(const char *tmp, t_info *data)
 {
     int y;
 
