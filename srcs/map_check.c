@@ -96,7 +96,7 @@ void map_check(t_info *data)
 
     visitied_init(data);
     head = NULL;
-    data->visited[(int)data->p_ypos][(int)data->p_xpos] = 1;
+    data->visited[(int)(data->p_ypos + 0.5)][(int)(data->p_xpos + 0.5)] = 1;
     enqueue(&head, data->p_xpos, data->p_ypos);
     while (head)
     {

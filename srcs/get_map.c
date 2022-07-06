@@ -3,8 +3,9 @@
 void position_alloc(t_info *data, int y, int x, int *cnt)
 {
     data->now_dir = data->map[y][x];
-    data->p_ypos = y;
-    data->p_xpos = x;
+    data->map[y][x] = '0';
+    data->p_ypos = y - 0.1;
+    data->p_xpos = x - 0.1;
     (*cnt)++;
 }
 

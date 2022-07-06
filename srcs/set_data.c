@@ -5,35 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-
-int	worldMap[24][24] = {
-							{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-							{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-							{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-							{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-							{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-							{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-						};
-
 void	verLine(t_info *data, int x, int y1, int y2, int color)
 {
 	int	y;
@@ -113,7 +84,7 @@ void	calc(t_info *data)
 				side = 1;
 			}
 			//Check if ray has hit a wall
-			if (worldMap[mapX][mapY] > 0) hit = 1;
+			if (data->map[mapX][mapY] == '1') hit = 1;
 		}
 		if (side == 0)
 			perpWallDist = (mapX - data->p_xpos + (1 - stepX) / 2) / rayDirX;
@@ -225,34 +196,34 @@ int	key_update(t_info* data)
 	// front
 	if (data->key.key_w)
 	{
-		if (!worldMap[(int)(data->p_xpos + data->dirX * data->moveSpeed)][(int)(data->p_ypos)])
+		if (data->map[(int)(data->p_xpos + data->dirX * data->moveSpeed)][(int)(data->p_ypos)] == '0')
 			data->p_xpos += data->dirX * data->moveSpeed;
-		if (!worldMap[(int)(data->p_xpos)][(int)(data->p_ypos + data->dirY * data->moveSpeed)])
+		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos + data->dirY * data->moveSpeed)] == '0')
 			data->p_ypos += data->dirY * data->moveSpeed;
 	}
 	
 	// back
 	if (data->key.key_s)
 	{
-		if (!worldMap[(int)(data->p_xpos - data->dirX * data->moveSpeed)][(int)(data->p_ypos)])
+		if (data->map[(int)(data->p_xpos - data->dirX * data->moveSpeed)][(int)(data->p_ypos)] == '0')
 			data->p_xpos -= data->dirX * data->moveSpeed;
-		if (!worldMap[(int)(data->p_xpos)][(int)(data->p_ypos - data->dirY * data->moveSpeed)])
+		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos - data->dirY * data->moveSpeed)] == '0')
 			data->p_ypos -= data->dirY * data->moveSpeed;
 	}
 
 	if (data->key.key_d)
 	{
-		if (!worldMap[(int)(data->p_xpos + data->planeX * data->moveSpeed)][(int)(data->p_ypos)])
+		if (data->map[(int)(data->p_xpos + data->planeX * data->moveSpeed)][(int)(data->p_ypos)] == '0')
 			data->p_xpos += data->planeX * data->moveSpeed;
-		if (!worldMap[(int)(data->p_xpos)][(int)(data->p_ypos + data->planeY * data->moveSpeed)])
+		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos + data->planeY * data->moveSpeed)] == '0')
 			data->p_ypos += data->planeY * data->moveSpeed;
 		
 	}
 	if (data->key.key_a)
 	{
-		if (!worldMap[(int)(data->p_xpos - data->planeX * data->moveSpeed)][(int)(data->p_ypos)])
+		if (data->map[(int)(data->p_xpos - data->planeX * data->moveSpeed)][(int)(data->p_ypos)] == '0')
 			data->p_xpos -= data->planeX * data->moveSpeed;
-		if (!worldMap[(int)(data->p_xpos)][(int)(data->p_ypos - data->planeY * data->moveSpeed)])
+		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos - data->planeY * data->moveSpeed)] == '0')
 			data->p_ypos -= data->planeY * data->moveSpeed;
 	}
 
@@ -284,6 +255,70 @@ int	key_update(t_info* data)
 	printf("%lf %lf\n", data->p_xpos, data->p_ypos);
 	return (0);
 }
+// int	key_update(t_info* data)
+// {
+// 	// front
+// 	if (data->key.key_w)
+// 	{
+// 		if (data->map[(int)(data->p_xpos + data->dirX * data->moveSpeed)][(int)(data->p_ypos)] != '1')
+// 			data->p_xpos += data->dirX * data->moveSpeed;
+// 		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos + data->dirY * data->moveSpeed)] != '1')
+// 			data->p_ypos += data->dirY * data->moveSpeed;
+// 	}
+	
+// 	// back
+// 	if (data->key.key_s)
+// 	{
+// 		if (data->map[(int)(data->p_xpos - data->dirX * data->moveSpeed)][(int)(data->p_ypos)] != '1')
+// 			data->p_xpos -= data->dirX * data->moveSpeed;
+// 		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos - data->dirY * data->moveSpeed)] != '1')
+// 			data->p_ypos -= data->dirY * data->moveSpeed;
+// 	}
+
+// 	if (data->key.key_d)
+// 	{
+// 		if (data->map[(int)(data->p_xpos + data->planeX * data->moveSpeed)][(int)(data->p_ypos)] != '1')
+// 			data->p_xpos += data->planeX * data->moveSpeed;
+// 		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos + data->planeY * data->moveSpeed)] != '1')
+// 			data->p_ypos += data->planeY * data->moveSpeed;
+		
+// 	}
+// 	if (data->key.key_a)
+// 	{
+// 		if (data->map[(int)(data->p_xpos - data->planeX * data->moveSpeed)][(int)(data->p_ypos)] != '1')
+// 			data->p_xpos -= data->planeX * data->moveSpeed;
+// 		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos - data->planeY * data->moveSpeed)] != '1')
+// 			data->p_ypos -= data->planeY * data->moveSpeed;
+// 	}
+
+// 	if (data->key.key_right)
+// 	{
+// 		//both camera direction and camera plane must be rotated
+// 		double oldDirX = data->dirX;
+// 		data->dirX = data->dirX * cos(-data->rotSpeed) - data->dirY * sin(-data->rotSpeed);
+// 		data->dirY = oldDirX * sin(-data->rotSpeed) + data->dirY * cos(-data->rotSpeed);
+
+// 		double oldPlaneX = data->planeX;
+// 		data->planeX = data->planeX * cos(-data->rotSpeed) - data->planeY * sin(-data->rotSpeed);
+// 		data->planeY = oldPlaneX * sin(-data->rotSpeed) + data->planeY * cos(-data->rotSpeed);
+// 	}
+// 	// left
+// 	if (data->key.key_left)
+// 	{
+// 		//both camera direction and camera plane must be rotated
+// 		double oldDirX = data->dirX;
+// 		data->dirX = data->dirX * cos(data->rotSpeed) - data->dirY * sin(data->rotSpeed);
+// 		data->dirY = oldDirX * sin(data->rotSpeed) + data->dirY * cos(data->rotSpeed);
+
+// 		double oldPlaneX = data->planeX;
+// 		data->planeX = data->planeX * cos(data->rotSpeed) - data->planeY * sin(data->rotSpeed);
+// 		data->planeY = oldPlaneX * sin(data->rotSpeed) + data->planeY * cos(data->rotSpeed);
+// 	}
+// 	// if (data->key.K_ESC)
+// 		// exit(0);
+// 	printf("%lf %lf\n", data->p_xpos, data->p_ypos);
+// 	return (0);
+// }
 
 void	load_image(t_info* data, int *texture, char *path, t_img *img)
 {
@@ -381,7 +416,7 @@ void	init_vec_data(t_info* data)
 	#define texHeight 64
 	#define texWidth 64
 	// 초기화 (나중에 삭제)
-	data->moveSpeed = 0.5;
+	data->moveSpeed = 0.2;
 	data->rotSpeed = 0.05;
 	data->win_width = 640;
 	data->win_height = 480;
