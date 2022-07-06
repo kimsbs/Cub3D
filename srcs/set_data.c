@@ -34,7 +34,7 @@ int	worldMap[24][24] = {
 							{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 						};
 
-void	verLine(info *data, int x, int y1, int y2, int color)
+void	verLine(t_info *data, int x, int y1, int y2, int color)
 {
 	int	y;
 
@@ -46,7 +46,7 @@ void	verLine(info *data, int x, int y1, int y2, int color)
 	}
 }
 
-void	calc(info *data)
+void	calc(t_info *data)
 {
 	int	x;
 
@@ -184,7 +184,7 @@ int create_trgb(int t, int r, int g, int b)
     return (t << 24 | r << 16 | g << 8 | b);
 }
 
-void	draw(info *data)
+void	draw(t_info *data)
 {
 	for (int y = 0; y < data->win_height; y++)
 	{
@@ -195,8 +195,8 @@ void	draw(info *data)
 	}
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 }
-int	key_update(info* data);
-int	main_loop(info *data)
+int	key_update(t_info* data);
+int	main_loop(t_info *data)
 {
 	int color1 = 0; // ceil val
 	int color2 = 0; // floor val
@@ -220,7 +220,7 @@ int	main_loop(info *data)
 	return (0);
 }
 
-int	key_update(info* data)
+int	key_update(t_info* data)
 {
 	// front
 	if (data->key.key_w)
@@ -285,7 +285,7 @@ int	key_update(info* data)
 	return (0);
 }
 
-void	load_image(info* data, int *texture, char *path, t_img *img)
+void	load_image(t_info* data, int *texture, char *path, t_img *img)
 {
 	img->img = mlx_xpm_file_to_image(data->mlx, path, &img->img_width, &img->img_height);
 	img->data = (int *)mlx_get_data_addr(img->img, &img->bpp, &img->size_l, &img->endian);
@@ -299,7 +299,7 @@ void	load_image(info* data, int *texture, char *path, t_img *img)
 	mlx_destroy_image(data->mlx, img->img);
 }
 
-void	load_texture(info *data)
+void	load_texture(t_info *data)
 {
 	t_img	img;
 
@@ -309,7 +309,7 @@ void	load_texture(info *data)
 	load_image(data, data->texture[3], data->tile[3], &img);
 }
 
-int	key_press(int key, info *data)
+int	key_press(int key, t_info *data)
 {
 	if (key == K_ESC)
 		exit(0);
@@ -329,7 +329,7 @@ int	key_press(int key, info *data)
 }
 
 
-int	key_release(int key, info *data)
+int	key_release(int key, t_info *data)
 {
 	if (key == K_ESC)
 		exit(0);
@@ -348,7 +348,7 @@ int	key_release(int key, info *data)
 	return (0);
 }
 
-void	init_vec_data(info* data)
+void	init_vec_data(t_info* data)
 {
 	data->mlx = mlx_init();
     if (!data->mlx)
