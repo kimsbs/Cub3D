@@ -9,7 +9,7 @@ SRCS = srcs/get_map.c srcs/main.c srcs/ft_func1.c srcs/ft_func2.c	\
 MLX = mlx
 MLX_lib = -Lmlx -lmlx -framework OpenGL -framework AppKit
 INCLUDES = -I includes -I $(MLX)
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
 OBJS = $(SRCS:.c=.o)
 
 %.o: %.c
