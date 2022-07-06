@@ -392,6 +392,19 @@ int	key_release(int key, t_info *data)
 	return (0);
 }
 
+int	exit_mlx(t_info *data)
+{
+	int y;
+
+	y = -1;
+	while (++y < data->height)
+	{
+		free(data->map[y]);
+	}
+	free(data->map);
+	exit (0);
+}
+
 void	init_vec_data(t_info* data)
 {
 	data->mlx = mlx_init();
@@ -430,7 +443,7 @@ void	init_vec_data(t_info* data)
 	data->win_width = 640;
 	data->win_height = 480;
 	// TODO: delete
-	printf("dirx:%lf diry:%lf planex%lf planey%lf\n", data->dirX, data->dirY, data->planeX, data->planeY);
+	//printf("dirx:%lf diry:%lf planex%lf planey%lf\n", data->dirX, data->dirY, data->planeX, data->planeY);
 	// window
 
 
@@ -461,6 +474,8 @@ void	init_vec_data(t_info* data)
 
 	mlx_loop_hook(data->mlx, &main_loop, data);
 	
+	//ㅇㅖ쁘게 바바꿔  주주세세요요
+	mlx_hook(data->win, 17, 0, exit_mlx, data);
 	mlx_hook(data->win, X_EVENT_KEY_PRESS, 0, &key_press, data);
 	mlx_hook(data->win, X_EVENT_KEY_RELEASE, 0, &key_release, data);
 

@@ -1,58 +1,58 @@
 # include "cub3d.h"
 
-char    *ft_strdup(const char *str)
+char	*ft_strdup(const char *str)
 {
-    int len;
-    int i;
-    char    *rt;
+	int		len;
+	int		i;
+	char	*rt;
 
-    if (!str)
-        return (0);
-    len = ft_strlen(str);
-    rt = (char *)malloc(sizeof(char) * (len + 1));
-    if (!rt)
-        print_error("strdup\n");
-    i = -1;
-    while(++i < len)
-        rt[i] = str[i];
-    rt[i] = '\0';
-    return (rt);
+	if (!str)
+		return (0);
+	len = ft_strlen(str);
+	rt = (char *)malloc(sizeof(char) * (len + 1));
+	if (!rt)
+		print_error("strdup\n");
+	i = -1;
+	while (++i < len)
+		rt[i] = str[i];
+	rt[i] = '\0';
+	return (rt);
 }
 
-char    *ft_strndup(const char *str, int n)
+char	*ft_strndup(const char *str, int n)
 {
-    int i;
-    char *rt;
+	int		i;
+	char	*rt;
 
-    if(!str)
-        return (0);
-    rt = (char *)malloc(sizeof(char) * (n + 1));    
-    if(!rt)
-        print_error("strndup\n");
-    i = -1;
-    while(++i < n)
-        rt[i] = str[i];
-    rt[i] = '\0';
-    return(rt);
+	if (!str)
+		return (0);
+	rt = (char *)malloc(sizeof(char) * (n + 1));
+	if (!rt)
+		print_error("strndup\n");
+	i = -1;
+	while (++i < n)
+		rt[i] = str[i];
+	rt[i] = '\0';
+	return (rt);
 }
 
-int     ft_strncmp(const char *s1, const char *s2, int n)
+int	ft_strncmp(const char *s1, const char *s2, int n)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while (++i < n)
-    {
-        if (s1[i] != s2[i])
-            return (0);
-    }
-    return (1);
+	i = -1;
+	while (++i < n)
+	{
+		if (s1[i] != s2[i])
+			return (0);
+	}
+	return (1);
 }
 
-int ft_strlcpy(char *dst, const char *src, int  dstsize)
+int	ft_strlcpy(char *dst, const char *src, int dstsize)
 {
-	int src_len;
-	int i;
+	int	src_len;
+	int	i;
 
 	if (!dst || !src)
 		return (0);
@@ -72,8 +72,8 @@ int ft_strlcpy(char *dst, const char *src, int  dstsize)
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int s1_len;
-	int s2_len;
+	int		s1_len;
+	int		s2_len;
 	char	*join;
 
 	if (!s1 && !s2)
@@ -85,7 +85,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	join = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
-    if (!join)
+	if (!join)
 		print_error("strjoin\n");
 	ft_strlcpy(join, s1, s1_len + 1);
 	ft_strlcpy(&join[s1_len], s2, s2_len + 1);
