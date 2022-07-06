@@ -81,15 +81,13 @@ void visitied_init(t_info *data)
 void free_visited(t_info *data)
 {
     int y;
-    int x;
 
     y = -1;
     while (++y < data->height)
     {
-        x = -1;
-        while(++x < data->width)
-            free(data->visited[y][x]); 
+        free(data->visited[y]); 
     }
+    free(data->visited);
 }
 
 void map_check(t_info *data)

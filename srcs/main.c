@@ -1,7 +1,7 @@
 # include "cub3d.h"
 # include "../mlx/mlx.h"
 
-void check_info(info data)
+void check_info(t_info data)
 {
     printf("%s\n", data.tile[0]);
     printf("%s\n", data.tile[1]);
@@ -14,7 +14,7 @@ void check_info(info data)
         printf("%s\n", data.map[i]);
 }
 
-void free_all_data(info data)
+void free_all_data(t_info data)
 {
     int i;
 
@@ -29,7 +29,7 @@ void free_all_data(info data)
 
 int main(int argc, char **argv)
 {
-    info data;
+    t_info data;
     int fd;
 
     if(argc != 2)
