@@ -7,6 +7,7 @@
 # include <fcntl.h>
 # include <stdio.h> // 나중에 삭제할것
 
+//ㅈㅓㅇ리
 # define K_A 0
 # define K_D 2
 # define K_S 1
@@ -18,6 +19,8 @@
 #define X_EVENT_KEY_PRESS	2
 #define X_EVENT_KEY_RELEASE	3
 #define X_EVENT_KEY_EXIT	17
+
+//TODO : remove
 #define mapWidth 24
 #define mapHeight 24
 
@@ -25,13 +28,12 @@ typedef struct s_queue{
     int x;
     int y;
     struct s_queue *next;
-}s_queue;
+}				t_queue;
 
 typedef struct	s_img
 {
 	void	*img;
 	int		*data;
-
 	int		size_l;
 	int		bpp;
 	int		endian;
@@ -50,7 +52,8 @@ typedef struct	s_key
 }				t_key;
 
 
-typedef struct info{
+typedef struct s_info{
+	//need free
 	int		**visited;
 	
 	double     p_xpos;
@@ -62,7 +65,6 @@ typedef struct info{
 	int     width;
 	int     height;
 
-	
 	char    *tile[4];
 
 	// real map
@@ -89,30 +91,30 @@ typedef struct info{
 
 	double		moveSpeed;
 	double		rotSpeed;
-}           info;
+}           	t_info;
 
 int     ft_strlen(const char *str);
 int     ft_strncmp(const char *s1, const char *s2, int n);
 int     ft_strlcpy(char *dst, const char *src, int  dstsize);
 void    put_str(const char *str);
-void    alloc_fc(char **tmp, info *data);
-void    alloc_tile(char **tmp, info *data);
+void    alloc_fc(char **tmp, t_info *data);
+void    alloc_tile(char **tmp, t_info *data);
 void    put_fc_data(char **tmp, int data[3]);
-void    cpy_map(const char *tmp, info *data);
-void    alloc_map(const char *tmp, info *data);
-void    get_map_info(const char *tmp, info *data);
-void    put_tile_data(char **tmp, info *data, int type);
+void    cpy_map(const char *tmp, t_info *data);
+void    alloc_map(const char *tmp, t_info *data);
+void    get_map_info(const char *tmp, t_info *data);
+void    put_tile_data(char **tmp, t_info *data, int type);
 void    we_just_do_same_things(char **tmp, char *dummy, int space_len, int enter_len);
-void	map_check(info *data);
+void	map_check(t_info *data);
 char    *ft_strdup(const char *str);
 char    *ft_strndup(const char *str, int n);
 char	*ft_strjoin(char const *s1, char const *s2);
-info    init_data(int fd);
+t_info    init_data(int fd);
 
-void	init_vec_data(info *data);
-void set_north(info* data);
-void set_south(info* data);
-void set_east(info* data);
-void set_west(info* data);
+void	init_vec_data(t_info *data);
+void set_north(t_info* data);
+void set_south(t_info* data);
+void set_east(t_info* data);
+void set_west(t_info* data);
 void print_error(const char * str);
 #endif
