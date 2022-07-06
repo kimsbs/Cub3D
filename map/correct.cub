@@ -1,10 +1,10 @@
-NO ./path_to_the_north_texture
+NO ./img/bluestone.xpm
 
-SO ./path_to_the_south_texture
+SO ./img/colorstone.xpm
 
-WE ./path_to_the_west_texture
+WE ./img/eagle.xpm
 
-EA ./path_to_the_east_texture
+EA ./img/wood.xpm
 
 F 220,100,0
 
