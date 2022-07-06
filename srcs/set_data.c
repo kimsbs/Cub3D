@@ -1,7 +1,5 @@
-#include "../totu/mlx_example/mlx/mlx.h"
+#include "../mlx/mlx.h"
 #include "../includes/cub3d.h"
-#include "key_macro.h"
-#include "data.h"
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
@@ -53,14 +51,14 @@ void	calc(info *data)
 	int	x;
 
 	x = 0;
-	while (x < width)
+	while (x < data->win_width)
 	{
-		double cameraX = 2 * x / (double)width - 1;
+		double cameraX = 2 * x / (double)data->win_width - 1;
 		double rayDirX = data->dirX + data->planeX * cameraX;
 		double rayDirY = data->dirY + data->planeY * cameraX;
 		
-		int mapX = (int)data->posX;
-		int mapY = (int)data->posY;
+		int mapX = (int)data->p_xpos;
+		int mapY = (int)data->p_ypos;
 
 		//length of ray from current position to next x or y-side
 		double sideDistX;
@@ -81,22 +79,22 @@ void	calc(info *data)
 		if (rayDirX < 0)
 		{
 			stepX = -1;
-			sideDistX = (data->posX - mapX) * deltaDistX;
+			sideDistX = (data->p_xpos - mapX) * deltaDistX;
 		}
 		else
 		{
 			stepX = 1;
-			sideDistX = (mapX + 1.0 - data->posX) * deltaDistX;
+			sideDistX = (mapX + 1.0 - data->p_xpos) * deltaDistX;
 		}
 		if (rayDirY < 0)
 		{
 			stepY = -1;
-			sideDistY = (data->posY - mapY) * deltaDistY;
+			sideDistY = (data->p_ypos - mapY) * deltaDistY;
 		}
 		else
 		{
 			stepY = 1;
-			sideDistY = (mapY + 1.0 - data->posY) * deltaDistY;
+			sideDistY = (mapY + 1.0 - data->p_ypos) * deltaDistY;
 		}
 
 		while (hit == 0)
@@ -118,20 +116,20 @@ void	calc(info *data)
 			if (worldMap[mapX][mapY] > 0) hit = 1;
 		}
 		if (side == 0)
-			perpWallDist = (mapX - data->posX + (1 - stepX) / 2) / rayDirX;
+			perpWallDist = (mapX - data->p_xpos + (1 - stepX) / 2) / rayDirX;
 		else
-			perpWallDist = (mapY - data->posY + (1 - stepY) / 2) / rayDirY;
+			perpWallDist = (mapY - data->p_ypos + (1 - stepY) / 2) / rayDirY;
 
 		//Calculate height of line to draw on screen
-		int lineHeight = (int)(height / perpWallDist);
+		int lineHeight = (int)(data->win_height / perpWallDist);
 
 		//calculate lowest and highest pixel to fill in current stripe
-		int drawStart = -lineHeight / 2 + height / 2;
+		int drawStart = -lineHeight / 2 + data->win_height / 2;
 		if(drawStart < 0)
 			drawStart = 0;
-		int drawEnd = lineHeight / 2 + height / 2;
-		if(drawEnd >= height)
-			drawEnd = height - 1;
+		int drawEnd = lineHeight / 2 + data->win_height / 2;
+		if(drawEnd >= data->win_height)
+			drawEnd = data->win_height - 1;
 
 		int	color;
 		if (worldMap[mapY][mapX] == 1)
@@ -154,77 +152,98 @@ void	calc(info *data)
 	}
 }
 
+int create_trgb(int t, int r, int g, int b)
+{
+    return (t << 24 | r << 16 | g << 8 | b);
+}
 int	main_loop(info *data)
 {
+	int color1 = 0; // ceil val
+	int color2 = 0; // floor val
+	// 
+	color1 = create_trgb(0, 255, 255, 255);
+	color2 = create_trgb(0, 0, 0, 0);
+
+	// ceil
+	for (int i = 0 ; i < data->win_height / 2 ; ++i)
+		for (int j = 0 ; j < data->win_width ; ++j)
+			mlx_pixel_put(data->mlx, data->win, j, i, color1);
+
+	// floor
+	for (int i = data->win_height / 2 ; i < data->win_height ; ++i)
+		for (int j = 0 ; j < data->win_width ; ++j)
+			mlx_pixel_put(data->mlx, data->win, j, i, color2);
+	
 	calc(data);
-	// mlx_put_image_to_window(info->mlx, info->win, &info->img, 0, 0);
+	// draw(data);
+	// key_update(data);
 
 	return (0);
 }
 
-int	key_press(int key, t_info *info)
+int	key_press(int key, info* data)
 {
 	// front
 	if (key == K_W)
 	{
-		if (!worldMap[(int)(info->posX + info->dirX * info->moveSpeed)][(int)(info->posY)])
-			info->posX += info->dirX * info->moveSpeed;
-		if (!worldMap[(int)(info->posX)][(int)(info->posY + info->dirY * info->moveSpeed)])
-			info->posY += info->dirY * info->moveSpeed;
+		if (!worldMap[(int)(data->p_xpos + data->dirX * data->moveSpeed)][(int)(data->p_ypos)])
+			data->p_xpos += data->dirX * data->moveSpeed;
+		if (!worldMap[(int)(data->p_xpos)][(int)(data->p_ypos + data->dirY * data->moveSpeed)])
+			data->p_ypos += data->dirY * data->moveSpeed;
 	}
 	
 	// back
 	if (key == K_S)
 	{
-		if (!worldMap[(int)(info->posX - info->dirX * info->moveSpeed)][(int)(info->posY)])
-			info->posX -= info->dirX * info->moveSpeed;
-		if (!worldMap[(int)(info->posX)][(int)(info->posY - info->dirY * info->moveSpeed)])
-			info->posY -= info->dirY * info->moveSpeed;
+		if (!worldMap[(int)(data->p_xpos - data->dirX * data->moveSpeed)][(int)(data->p_ypos)])
+			data->p_xpos -= data->dirX * data->moveSpeed;
+		if (!worldMap[(int)(data->p_xpos)][(int)(data->p_ypos - data->dirY * data->moveSpeed)])
+			data->p_ypos -= data->dirY * data->moveSpeed;
 	}
 
 	if (key == K_D)
 	{
-		if (!worldMap[(int)(info->posX + info->planeX * info->moveSpeed)][(int)(info->posY)])
-			info->posX += info->planeX * info->moveSpeed;
-		if (!worldMap[(int)(info->posX)][(int)(info->posY + info->planeY * info->moveSpeed)])
-			info->posY += info->planeY * info->moveSpeed;
+		if (!worldMap[(int)(data->p_xpos + data->planeX * data->moveSpeed)][(int)(data->p_ypos)])
+			data->p_xpos += data->planeX * data->moveSpeed;
+		if (!worldMap[(int)(data->p_xpos)][(int)(data->p_ypos + data->planeY * data->moveSpeed)])
+			data->p_ypos += data->planeY * data->moveSpeed;
 		
 	}
 	if (key == K_A)
 	{
-		if (!worldMap[(int)(info->posX - info->planeX * info->moveSpeed)][(int)(info->posY)])
-			info->posX -= info->planeX * info->moveSpeed;
-		if (!worldMap[(int)(info->posX)][(int)(info->posY - info->planeY * info->moveSpeed)])
-			info->posY -= info->planeY * info->moveSpeed;
+		if (!worldMap[(int)(data->p_xpos - data->planeX * data->moveSpeed)][(int)(data->p_ypos)])
+			data->p_xpos -= data->planeX * data->moveSpeed;
+		if (!worldMap[(int)(data->p_xpos)][(int)(data->p_ypos - data->planeY * data->moveSpeed)])
+			data->p_ypos -= data->planeY * data->moveSpeed;
 	}
 
 	if (key == K_AR_R)
 	{
 		//both camera direction and camera plane must be rotated
-		double oldDirX = info->dirX;
-		info->dirX = info->dirX * cos(-info->rotSpeed) - info->dirY * sin(-info->rotSpeed);
-		info->dirY = oldDirX * sin(-info->rotSpeed) + info->dirY * cos(-info->rotSpeed);
+		double oldDirX = data->dirX;
+		data->dirX = data->dirX * cos(-data->rotSpeed) - data->dirY * sin(-data->rotSpeed);
+		data->dirY = oldDirX * sin(-data->rotSpeed) + data->dirY * cos(-data->rotSpeed);
 
-		double oldPlaneX = info->planeX;
-		info->planeX = info->planeX * cos(-info->rotSpeed) - info->planeY * sin(-info->rotSpeed);
-		info->planeY = oldPlaneX * sin(-info->rotSpeed) + info->planeY * cos(-info->rotSpeed);
+		double oldPlaneX = data->planeX;
+		data->planeX = data->planeX * cos(-data->rotSpeed) - data->planeY * sin(-data->rotSpeed);
+		data->planeY = oldPlaneX * sin(-data->rotSpeed) + data->planeY * cos(-data->rotSpeed);
 	}
 	// left
 	if (key == K_AR_L)
 	{
 		//both camera direction and camera plane must be rotated
-		double oldDirX = info->dirX;
-		info->dirX = info->dirX * cos(info->rotSpeed) - info->dirY * sin(info->rotSpeed);
-		info->dirY = oldDirX * sin(info->rotSpeed) + info->dirY * cos(info->rotSpeed);
+		double oldDirX = data->dirX;
+		data->dirX = data->dirX * cos(data->rotSpeed) - data->dirY * sin(data->rotSpeed);
+		data->dirY = oldDirX * sin(data->rotSpeed) + data->dirY * cos(data->rotSpeed);
 
-		double oldPlaneX = info->planeX;
-		info->planeX = info->planeX * cos(info->rotSpeed) - info->planeY * sin(info->rotSpeed);
-		info->planeY = oldPlaneX * sin(info->rotSpeed) + info->planeY * cos(info->rotSpeed);
+		double oldPlaneX = data->planeX;
+		data->planeX = data->planeX * cos(data->rotSpeed) - data->planeY * sin(data->rotSpeed);
+		data->planeY = oldPlaneX * sin(data->rotSpeed) + data->planeY * cos(data->rotSpeed);
 	}
 	printf("keyboard:%d\n", key);
 	if (key == K_ESC)
 		exit(0);
-	printf("%lf %lf\n", info->posX, info->posY);
+	printf("%lf %lf\n", data->p_xpos, data->p_ypos);
 	return (0);
 }
 
@@ -238,7 +257,8 @@ void	init_vec_data(info* data)
     data->p_xpos = 12;
     data->p_ypos = 5;
 	data->now_dir = 'N';
-	
+	// TODO: delete
+
     if (data->now_dir == 'N')
 		set_north(data);
 	else if (data->now_dir == 'S')
@@ -250,13 +270,17 @@ void	init_vec_data(info* data)
     else
 		print_error("No search dir");
 
-	// speed
+	// 초기화 (나중에 삭제)
 	data->moveSpeed = 0.5;
 	data->rotSpeed = 0.05;
-	
-	data->win = mlx_new_window(data->mlx, width, height, "cub3D");
-
+	data->win_width = 640;
+	data->win_height = 480;
+	// TODO: delete
+	printf("dirx:%lf diry:%lf planex%lf planey%lf\n", data->dirX, data->dirY, data->planeX, data->planeY);
+	data->win = mlx_new_window(data->mlx, data->win_width, data->win_height, "cub3D");
+	printf("%p", data->win);
 	mlx_loop_hook(data->mlx, &main_loop, data);
+	printf("dirx:%lf diry:%lf planex%lf planey%lf\n", data->dirX, data->dirY, data->planeX, data->planeY);
 	mlx_hook(data->win, X_EVENT_KEY_PRESS, 0, &key_press, data);
 
 	mlx_loop(data->mlx);

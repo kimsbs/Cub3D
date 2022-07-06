@@ -1,5 +1,5 @@
 # include "cub3d.h"
-
+#include "../mlx/mlx.h"
 void check_info(info data)
 {
     printf("%s\n", data.tile[0]);
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     close(fd);    
     check_info(data);
     //Add my function
-    
+    init_vec_data(&data);
 
     free_all_data(data);
     return (0);
