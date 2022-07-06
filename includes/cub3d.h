@@ -20,7 +20,15 @@
 #define mapWidth 24
 #define mapHeight 24
 
+typedef struct s_queue{
+    int x;
+    int y;
+    struct s_queue *next;
+}s_queue;
+
 typedef struct info{
+	int		**visited;
+	
 	double     p_xpos;
 	double     p_ypos;
 	
@@ -65,9 +73,9 @@ void    put_fc_data(char **tmp, int data[3]);
 void    cpy_map(const char *tmp, info *data);
 void    alloc_map(const char *tmp, info *data);
 void    get_map_info(const char *tmp, info *data);
-void    exit_with_str(const char *str, int exit_code);
 void    put_tile_data(char **tmp, info *data, int type);
 void    we_just_do_same_things(char **tmp, char *dummy, int space_len, int enter_len);
+void	map_check(info *data);
 char    *ft_strdup(const char *str);
 char    *ft_strndup(const char *str, int n);
 char	*ft_strjoin(char const *s1, char const *s2);

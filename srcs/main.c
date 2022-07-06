@@ -1,5 +1,6 @@
 # include "cub3d.h"
-#include "../mlx/mlx.h"
+# include "../mlx/mlx.h"
+
 void check_info(info data)
 {
     printf("%s\n", data.tile[0]);
@@ -32,10 +33,10 @@ int main(int argc, char **argv)
     int fd;
 
     if(argc != 2)
-        exit_with_str("Arguments!! ./cub3d [map.cub]\n", -1);
+        print_error("Arguments!! ./cub3d [map.cub]\n");
     fd = open(argv[1], O_RDONLY);
     if(fd < 0)
-        exit_with_str("File Open Error!!\n", -1);
+        print_error("File Open Failed!!\n");
     data = init_data(fd);
     close(fd);    
     check_info(data);

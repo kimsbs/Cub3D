@@ -11,7 +11,7 @@ char    *ft_strdup(const char *str)
     len = ft_strlen(str);
     rt = (char *)malloc(sizeof(char) * (len + 1));
     if (!rt)
-        exit_with_str("strdup error", -1);
+        print_error("strdup\n");
     i = -1;
     while(++i < len)
         rt[i] = str[i];
@@ -28,7 +28,7 @@ char    *ft_strndup(const char *str, int n)
         return (0);
     rt = (char *)malloc(sizeof(char) * (n + 1));    
     if(!rt)
-        exit_with_str("strndup error", -1);
+        print_error("strndup\n");
     i = -1;
     while(++i < n)
         rt[i] = str[i];
@@ -86,7 +86,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	s2_len = ft_strlen(s2);
 	join = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
     if (!join)
-		exit_with_str("strjoin error", -1);
+		print_error("strjoin\n");
 	ft_strlcpy(join, s1, s1_len + 1);
 	ft_strlcpy(&join[s1_len], s2, s2_len + 1);
 	free((char *)s1);

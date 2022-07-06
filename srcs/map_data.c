@@ -15,6 +15,8 @@ void put_tile_data(char **tmp, info *data, int type)
         enter_len++;
     //space 이후 STRING -> 복사 후 tile에 저장
     data->tile[type] = ft_strndup(dummy + space_len, enter_len);
+    if(!data->tile[type])
+        print_error("tile alloc\n");
     //'\n'이후 의 거시기 복사.
     dummy = ft_strdup(*tmp + space_len + enter_len + 1);
     free(*tmp);
@@ -52,7 +54,7 @@ void alloc_tile(char **tmp, info *data)
         else if (ft_strncmp(*tmp, "EA", 2) && !data->tile[3])
             put_tile_data(tmp, data, 3);
         else
-            exit_with_str("tile data error\n", -1);
+            print_error("tile data\n");
     }
 }
 
@@ -62,7 +64,7 @@ int put_fc_data2(char now, int data[3], int *rgb)
     {
         (*rgb)++;
         if (*rgb > 2)
-            exit_with_str("rgb data error\n", -1);
+            print_error("rgb data\n");
         return (0);
     }
     if (now >= '0' && now <= '9')
@@ -70,10 +72,10 @@ int put_fc_data2(char now, int data[3], int *rgb)
         data[*rgb] *= 10;
         data[*rgb] += now - '0';
         if (data[*rgb] > 255)
-            exit_with_str("rgb data error\n", -1);
+            print_error("rgb data\n");
     }
     else
-        exit_with_str("rgb data error\n", -1);
+        print_error("rgb data\n");
     return (0);
 }
 
@@ -94,6 +96,8 @@ void put_fc_data(char **tmp, int data[3])
     //255,0,0 -> to array data[]
     while (dummy[space_len + ++enter_len] && dummy[space_len + enter_len] != '\n')
         put_fc_data2(dummy[space_len + enter_len], data, &rgb);
+    if (enter_len == 0)
+        print_error("floor and ceiling data empty\n");
     //'\n'다음 라인으로 tmp 복사 후 기존 tmp free
     dummy = ft_strdup(*tmp + space_len + enter_len + 1);
     free(*tmp);
@@ -136,6 +140,6 @@ void alloc_fc(char **tmp, info *data)
             data->celing[3] = 1;
         }
         else
-            exit_with_str("color error\n", -1);
+            print_error("color\n");
     }
 }

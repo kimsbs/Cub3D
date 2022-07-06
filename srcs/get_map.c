@@ -27,11 +27,11 @@ void check_map(info *data, int cnt)
                 continue;
             }
             else
-                exit_with_str("map contain odd data", -1);
+                print_error("map contain odd data\n");
         }
     }
     if (cnt != 1)
-        exit_with_str("map contain odd data", -1);
+        print_error("map contain odd data\n");
 }
 
 void mapdata_to_info(char *tmp, info *data)
@@ -47,6 +47,7 @@ void mapdata_to_info(char *tmp, info *data)
     free(tmp);
     data->surround = -1;
     check_map(data, 0);
+    map_check(data);
 }
 
 info init_data(int fd)

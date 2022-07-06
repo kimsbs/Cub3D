@@ -19,12 +19,3 @@ void    put_str(const char *str)
     len = ft_strlen(str);
     write(1, str, len);
 }
-
-void    exit_with_str(const char *str, int exit_code)
-{
-    int len;
-
-    len = ft_strlen(str);
-    write(1, str, len);
-    exit(exit_code);
-}
