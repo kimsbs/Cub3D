@@ -7,17 +7,53 @@
 # include <fcntl.h>
 # include <stdio.h> // 나중에 삭제할것
 
+# define K_A 0
+# define K_D 2
+# define K_S 1
+# define K_W 13
+# define K_AR_L 123
+# define K_AR_R 124
+# define K_ESC 53
+
+#define X_EVENT_KEY_PRESS	2
+#define X_EVENT_KEY_EXIT	17
+#define mapWidth 24
+#define mapHeight 24
+
 typedef struct info{
-    int     p_xpos;
-    int     p_ypos;
-    int     surround;
-    int     width;
-    int     height;
-    char    *tile[4];
-    char    **map;
-    int     floor[4];
-    int     celing[4];
-}info;
+	double     p_xpos;
+	double     p_ypos;
+	
+	// bool
+	int     surround;
+	// map size
+	int     width;
+	int     height;
+
+	
+	char    *tile[4];
+
+	// real map
+	char    **map;
+	//
+	int     floor[4];
+	int     celing[4];
+
+	// 내껏 헤
+	void*		mlx;
+	void*		win;
+	int			win_width;
+	int			win_height;
+	double     dirX;
+	double     dirY;
+	double     planeX;
+	double     planeY;
+
+	char        now_dir;
+
+	double		moveSpeed;
+	double		rotSpeed;
+}           info;
 
 int     ft_strlen(const char *str);
 int     ft_strncmp(const char *s1, const char *s2, int n);
@@ -36,4 +72,11 @@ char    *ft_strdup(const char *str);
 char    *ft_strndup(const char *str, int n);
 char	*ft_strjoin(char const *s1, char const *s2);
 info    init_data(int fd);
+
+void	init_vec_data(info *data);
+void set_north(info* data);
+void set_south(info* data);
+void set_east(info* data);
+void set_west(info* data);
+void print_error(const char * str);
 #endif
