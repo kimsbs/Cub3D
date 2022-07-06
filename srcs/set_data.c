@@ -25,24 +25,28 @@ void	calc(t_info *data)
 	while (x < data->win_width)
 	{
 		double cameraX = 2 * x / (double)data->win_width - 1;
-		double rayDirX = data->dirX + data->planeX * cameraX;
+
 		double rayDirY = data->dirY + data->planeY * cameraX;
+		double rayDirX = data->dirX + data->planeX * cameraX;
 		
-		int mapX = (int)data->p_xpos;
 		int mapY = (int)data->p_ypos;
+		int mapX = (int)data->p_xpos;
+		
 
 		//length of ray from current position to next x or y-side
-		double sideDistX;
 		double sideDistY;
+		double sideDistX;
 		
 		 //length of ray from one x or y-side to next x or y-side
-		double deltaDistX = fabs(1 / rayDirX);
 		double deltaDistY = fabs(1 / rayDirY);
+		double deltaDistX = fabs(1 / rayDirX);
+		
 		double perpWallDist;
 		
 		//what direction to step in x or y-direction (either +1 or -1)
-		int stepX;
 		int stepY;
+		int stepX;
+		
 		
 		int hit = 0; //was there a wall hit?
 		int side; //was a NS or a EW wall hit?
@@ -84,7 +88,7 @@ void	calc(t_info *data)
 				side = 1;
 			}
 			//Check if ray has hit a wall
-			if (data->map[mapX][mapY] == '1') hit = 1;
+			if (data->map[mapY][mapX] == '1') hit = 1;
 		}
 		if (side == 0)
 			perpWallDist = (mapX - data->p_xpos + (1 - stepX) / 2) / rayDirX;
@@ -103,16 +107,16 @@ void	calc(t_info *data)
 			drawEnd = data->win_height - 1;
 
 		int texNum;
-		if (side == 0 && rayDirX < 0)
+		if (side == 1 && rayDirY < 0)
 			texNum = 0;
 			// N
-		else if (side == 0 && rayDirX > 0)
+		else if (side == 1 && rayDirY > 0)
 			texNum = 1;
 			// S
-		else if (side == 1 && rayDirY < 0)
+		else if (side == 0 && rayDirX < 0)
 			texNum = 2;
 			// W
-		else if (side == 1 && rayDirY > 0)
+		else if (side == 0 && rayDirX > 0)
 			texNum = 3;
 			// E
 		double wallX;
@@ -172,8 +176,8 @@ int	main_loop(t_info *data)
 	int color1 = 0; // ceil val
 	int color2 = 0; // floor val
 	// 
-	color1 = create_trgb(0, 255, 255, 255);
-	color2 = create_trgb(0, 0, 0, 0);
+	color1 = create_trgb(0, data->celing[0], data->celing[1], data->celing[2]);
+	color2 = create_trgb(0, data->floor[0], data->floor[1], data->floor[2]);
 
 	
 	// ceil 보류
@@ -196,38 +200,43 @@ int	key_update(t_info* data)
 	// front
 	if (data->key.key_w)
 	{
-		if (data->map[(int)(data->p_xpos + data->dirX * data->moveSpeed)][(int)(data->p_ypos)] == '0')
+		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos + data->dirX * data->moveSpeed)] == '0')
 			data->p_xpos += data->dirX * data->moveSpeed;
-		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos + data->dirY * data->moveSpeed)] == '0')
+			
+			
+		if (data->map[(int)(data->p_ypos + data->dirY * data->moveSpeed)][(int)(data->p_xpos)] == '0')
 			data->p_ypos += data->dirY * data->moveSpeed;
 	}
 	
 	// back
 	if (data->key.key_s)
 	{
-		if (data->map[(int)(data->p_xpos - data->dirX * data->moveSpeed)][(int)(data->p_ypos)] == '0')
+		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos - data->dirX * data->moveSpeed)] == '0')
 			data->p_xpos -= data->dirX * data->moveSpeed;
-		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos - data->dirY * data->moveSpeed)] == '0')
+			
+		if (data->map[(int)(data->p_ypos - data->dirY * data->moveSpeed)][(int)(data->p_xpos)] == '0')
 			data->p_ypos -= data->dirY * data->moveSpeed;
 	}
 
 	if (data->key.key_d)
 	{
-		if (data->map[(int)(data->p_xpos + data->planeX * data->moveSpeed)][(int)(data->p_ypos)] == '0')
+		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos + data->planeX * data->moveSpeed)] == '0')
+			
 			data->p_xpos += data->planeX * data->moveSpeed;
-		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos + data->planeY * data->moveSpeed)] == '0')
+		if (data->map[(int)(data->p_ypos + data->planeY * data->moveSpeed)][(int)(data->p_xpos)] == '0')
 			data->p_ypos += data->planeY * data->moveSpeed;
 		
 	}
 	if (data->key.key_a)
 	{
-		if (data->map[(int)(data->p_xpos - data->planeX * data->moveSpeed)][(int)(data->p_ypos)] == '0')
+		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos - data->planeX * data->moveSpeed)] == '0')
 			data->p_xpos -= data->planeX * data->moveSpeed;
-		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos - data->planeY * data->moveSpeed)] == '0')
+			
+		if (data->map[(int)(data->p_ypos - data->planeY * data->moveSpeed)][(int)(data->p_xpos)] == '0')
 			data->p_ypos -= data->planeY * data->moveSpeed;
 	}
 
-	if (data->key.key_right)
+	if (data->key.key_left)
 	{
 		//both camera direction and camera plane must be rotated
 		double oldDirX = data->dirX;
@@ -239,7 +248,7 @@ int	key_update(t_info* data)
 		data->planeY = oldPlaneX * sin(-data->rotSpeed) + data->planeY * cos(-data->rotSpeed);
 	}
 	// left
-	if (data->key.key_left)
+	if (data->key.key_right)
 	{
 		//both camera direction and camera plane must be rotated
 		double oldDirX = data->dirX;
