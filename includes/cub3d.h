@@ -121,6 +121,9 @@ void	set_south(t_info* data);
 void	set_east(t_info* data);
 void	set_west(t_info* data);
 void    set_dir_with_vec(t_info* data);
+
+// util
+int create_trgb(int t, int r, int g, int b);
 void	print_error(const char * str);
 
 
