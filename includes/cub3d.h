@@ -82,6 +82,33 @@ typedef struct s_info{
 	char		now_dir;
 }				t_info;
 
+typedef struct s_ray
+{
+	double	camera_x;
+	double	ray_dir_y;
+	double	ray_dir_x;
+	int		map_y;
+	int		map_x;
+	double	side_dist_y;
+	double	side_dist_x;
+	double	delta_dist_y;
+	double	delta_dist_x;
+	double	wall_dist;
+	int		step_y;
+	int		step_x;
+	int		hit;
+	int		side;
+	int		line_height;
+	int		draw_start_pos;
+	int		draw_end_pos;
+	int		tex_number;
+	double	wall_x;
+	int		tex_x;
+	int		tex_y;
+	double	step;
+	double	tex_pos;
+}				t_ray;
+
 int		ft_strlen(const char *str);
 int		ft_strncmp(const char *s1, const char *s2, int n);
 int		ft_strlcpy(char *dst, const char *src, int dstsize);
@@ -106,7 +133,6 @@ char	*ft_strjoin(char const *s1, char const *s2);
 t_info	*init_data(int fd);
 t_queue	*get_last(t_queue *head);
 
-void	start_mlx(t_info *data);
 void	set_north(t_info *data);
 void	set_south(t_info *data);
 void	set_east(t_info *data);
@@ -136,4 +162,17 @@ void	ft_key_arrow_right(t_info *data);
 //tex
 void	ft_texture_init(t_info *data);
 
+// ft_raycast.c
+void	set_side_and_sidedist(t_ray *ray, t_info *data);
+void	set_vector_and_dist(t_ray *ray, t_info *data, int x);
+void	test(t_ray *ray, t_info *data);
+void	test1(t_ray *ray);
+void	set_buf_value(t_info *data, t_ray *ray, int x);
+
+// main_mlx
+int		exit_mlx(t_info *data);
+void	start_mlx(t_info *data);
+void	raycast(t_info *data);
+void	draw(t_info *data);
+int		main_loop(t_info *data);
 #endif
