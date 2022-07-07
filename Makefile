@@ -5,6 +5,10 @@ SRCS = srcs/get_map.c srcs/main.c srcs/ft_func1.c srcs/ft_func2.c	\
 		srcs/set_data.c		\
 		srcs/set_dir.c		\
 		srcs/util.c			\
+		srcs/ft_key_set.c	\
+		srcs/ft_key_alpha.c	\
+		srcs/ft_key_arrow.c	\
+		srcs/ft_tex_init.c	\
 
 MLX = mlx
 
