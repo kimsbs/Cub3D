@@ -8,8 +8,8 @@ void	calc(t_info *data)
 	int	x;
 	int y;
 
-	x = 0;
-	while (x < WIN_WIDTH)
+	x = -1;
+	while (++x < WIN_WIDTH)
 	{
 		double cameraX = 2 * x / (double)WIN_WIDTH - 1;
 
@@ -112,8 +112,6 @@ void	calc(t_info *data)
 			wallX = data->p_xpos + perpWallDist * rayDirX;
 		wallX -= floor(wallX);
 
-		#define TEXT_WIDTH 64
-		#define TEXT_HEIGTH 64
 		// x coordinate on the texture
 		int texX = (int)(wallX * (double)TEXT_WIDTH);
 		if (side == 0 && rayDirX > 0)
@@ -131,14 +129,10 @@ void	calc(t_info *data)
 			// Cast the texture coordinate to integer, and mask with (TEXT_HEIGTH - 1) in case of overflow
 			int texY = (int)texPos & (TEXT_HEIGTH - 1);
 			texPos += step;
-			int color = data->texture[texNum][TEXT_HEIGTH * texY + texX];
 			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-			if (side == 1)
-				color = (color >> 1) & 8355711;
-			data->buf[y][x] = color;
+			data->buf[y][x] = data->texture[texNum][TEXT_HEIGTH * texY + texX];
 			y++;
 		}
-		x++;
 	}
 }
 

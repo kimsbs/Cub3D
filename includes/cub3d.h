@@ -23,7 +23,7 @@
 #define TEXT_HEIGTH 64
 #define TEXT_WIDTH 64
 
-#define MOVE_SPEED 0.2
+#define MOVE_SPEED 0.05
 #define ROT_SPEED 0.05
 #define WIN_WIDTH 640
 #define WIN_HEIGTH 480
