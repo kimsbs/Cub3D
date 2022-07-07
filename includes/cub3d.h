@@ -20,9 +20,13 @@
 #define X_EVENT_KEY_RELEASE	3
 #define X_EVENT_KEY_EXIT	17
 
-//TODO : remove
-#define mapWidth 24
-#define mapHeight 24
+#define TEXT_HEIGTH 64
+#define TEXT_WIDTH 64
+
+#define MOVE_SPEED 0.2
+#define ROT_SPEED 0.05
+#define WIN_WIDTH 640
+#define WIN_HEIGTH 480
 
 typedef struct s_queue{
     int x;
@@ -59,11 +63,9 @@ typedef struct s_info{
 	double     p_xpos;
 	double     p_ypos;
 	
-	// bool
-	int     surround;
 	// map size
-	int     width;
-	int     height;
+	int     map_width;
+	int     map_height;
 
 	char    *tile[4];
 
@@ -82,12 +84,12 @@ typedef struct s_info{
 	void*		win;
 	int			win_width;
 	int			win_height;
-	double     dirX;
-	double     dirY;
-	double     planeX;
-	double     planeY;
+	double		dirX;
+	double		dirY;
+	double		planeX;
+	double		planeY;
 
-	char        now_dir;
+	char		now_dir;
 
 	double		moveSpeed;
 	double		rotSpeed;
@@ -117,9 +119,10 @@ t_info	init_data(int fd);
 t_queue	*get_last(t_queue *head);
 
 void	init_vec_data(t_info *data);
-void set_north(t_info* data);
-void set_south(t_info* data);
-void set_east(t_info* data);
-void set_west(t_info* data);
-void print_error(const char * str);
+void	set_north(t_info* data);
+void	set_south(t_info* data);
+void	set_east(t_info* data);
+void	set_west(t_info* data);
+void	print_error(const char * str);
+
 #endif

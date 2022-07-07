@@ -27,9 +27,9 @@ $(NAME) : $(OBJS)
 
 clean:
 	rm -f $(OBJS)
+	@make clean -C $(MLX)
 
 fclean: clean
 	rm -f $(NAME)
-#	@make clean -C $(MLX)
 	
 re: fclean all

@@ -1,30 +1,17 @@
 #include "../mlx/mlx.h"
 #include "../includes/cub3d.h"
-#include <math.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 
-void	verLine(t_info *data, int x, int y1, int y2, int color)
-{
-	int	y;
-
-	y = y1;
-	while (y <= y2)
-	{
-		mlx_pixel_put(data->mlx, data->win, x, y, color);
-		y++;
-	}
-}
+int	key_update(t_info* data);
 
 void	calc(t_info *data)
 {
 	int	x;
+	int y;
 
 	x = 0;
-	while (x < data->win_width)
+	while (x < WIN_WIDTH)
 	{
-		double cameraX = 2 * x / (double)data->win_width - 1;
+		double cameraX = 2 * x / (double)WIN_WIDTH - 1;
 
 		double rayDirY = data->dirY + data->planeY * cameraX;
 		double rayDirX = data->dirX + data->planeX * cameraX;
@@ -32,7 +19,6 @@ void	calc(t_info *data)
 		int mapY = (int)data->p_ypos;
 		int mapX = (int)data->p_xpos;
 		
-
 		//length of ray from current position to next x or y-side
 		double sideDistY;
 		double sideDistX;
@@ -46,7 +32,6 @@ void	calc(t_info *data)
 		//what direction to step in x or y-direction (either +1 or -1)
 		int stepY;
 		int stepX;
-		
 		
 		int hit = 0; //was there a wall hit?
 		int side; //was a NS or a EW wall hit?
@@ -88,7 +73,8 @@ void	calc(t_info *data)
 				side = 1;
 			}
 			//Check if ray has hit a wall
-			if (data->map[mapY][mapX] == '1') hit = 1;
+			if (data->map[mapY][mapX] == '1')
+				hit = 1;
 		}
 		if (side == 0)
 			perpWallDist = (mapX - data->p_xpos + (1 - stepX) / 2) / rayDirX;
@@ -96,15 +82,15 @@ void	calc(t_info *data)
 			perpWallDist = (mapY - data->p_ypos + (1 - stepY) / 2) / rayDirY;
 
 		//Calculate height of line to draw on screen
-		int lineHeight = (int)(data->win_height / perpWallDist);
+		int lineHeight = (int)(WIN_HEIGTH / perpWallDist);
 
 		//calculate lowest and highest pixel to fill in current stripe
-		int drawStart = -lineHeight / 2 + data->win_height / 2;
-		if(drawStart < 0)
+		int drawStart = -lineHeight / 2 + WIN_HEIGTH / 2;
+		if (drawStart < 0)
 			drawStart = 0;
-		int drawEnd = lineHeight / 2 + data->win_height / 2;
-		if(drawEnd >= data->win_height)
-			drawEnd = data->win_height - 1;
+		int drawEnd = lineHeight / 2 + WIN_HEIGTH / 2;
+		if (drawEnd >= WIN_HEIGTH)
+			drawEnd = WIN_HEIGTH - 1;
 
 		int texNum;
 		if (side == 1 && rayDirY < 0)
@@ -126,29 +112,31 @@ void	calc(t_info *data)
 			wallX = data->p_xpos + perpWallDist * rayDirX;
 		wallX -= floor(wallX);
 
-		#define texWidth 64
-		#define texHeight 64
+		#define TEXT_WIDTH 64
+		#define TEXT_HEIGTH 64
 		// x coordinate on the texture
-		int texX = (int)(wallX * (double)texWidth);
+		int texX = (int)(wallX * (double)TEXT_WIDTH);
 		if (side == 0 && rayDirX > 0)
-			texX = texWidth - texX - 1;
+			texX = TEXT_WIDTH - texX - 1;
 		if (side == 1 && rayDirY < 0)
-			texX = texWidth - texX - 1;
+			texX = TEXT_WIDTH - texX - 1;
 
 		// How much to increase the texture coordinate perscreen pixel
-		double step = 1.0 * texHeight / lineHeight;
+		double step = 1.0 * TEXT_HEIGTH / lineHeight;
 		// Starting texture coordinate
-		double texPos = (drawStart - data->win_height / 2 + lineHeight / 2) * step;
-		for (int y = drawStart; y < drawEnd; y++)
+		double texPos = (drawStart - WIN_HEIGTH / 2 + lineHeight / 2) * step;
+		y = drawStart;
+		while (y < drawEnd)
 		{
-			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-			int texY = (int)texPos & (texHeight - 1);
+			// Cast the texture coordinate to integer, and mask with (TEXT_HEIGTH - 1) in case of overflow
+			int texY = (int)texPos & (TEXT_HEIGTH - 1);
 			texPos += step;
-			int color = data->texture[texNum][texHeight * texY + texX];
+			int color = data->texture[texNum][TEXT_HEIGTH * texY + texX];
 			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 			if (side == 1)
 				color = (color >> 1) & 8355711;
 			data->buf[y][x] = color;
+			y++;
 		}
 		x++;
 	}
@@ -161,34 +149,43 @@ int create_trgb(int t, int r, int g, int b)
 
 void	draw(t_info *data)
 {
-	for (int y = 0; y < data->win_height; y++)
+	int	y;
+	int	x;
+
+	y = -1;
+	while (++y < WIN_HEIGTH)
 	{
-		for (int x = 0; x < data->win_width; x++)
+		x = -1;
+		while (++x < WIN_WIDTH)
 		{
-			data->img.data[y * data->win_width + x] = data->buf[y][x];
+			data->img.data[y * WIN_WIDTH + x] = data->buf[y][x];
 		}
 	}
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 }
-int	key_update(t_info* data);
+
 int	main_loop(t_info *data)
 {
-	int color1 = 0; // ceil val
-	int color2 = 0; // floor val
-	// 
-	color1 = create_trgb(0, data->celing[0], data->celing[1], data->celing[2]);
-	color2 = create_trgb(0, data->floor[0], data->floor[1], data->floor[2]);
+	int	ceil_color = 0; // ceil val
+	int	floor_color = 0; // floor val
+	int	y;
+	int	x;
 
-	
-	// ceil 보류
-	for (int i = 0 ; i < data->win_height / 2 ; ++i)
-		for (int j = 0 ; j < data->win_width ; ++j)
-			data->buf[i][j] = color1;
+	ceil_color = create_trgb(0, data->celing[0], data->celing[1], data->celing[2]);
+	floor_color = create_trgb(0, data->floor[0], data->floor[1], data->floor[2]);
 
-	// floor
-	for (int i = data->win_height / 2 ; i < data->win_height ; ++i)
-		for (int j = 0 ; j < data->win_width ; ++j)
-			data->buf[i][j] = color2;
+	y = -1;
+	while (++y < WIN_HEIGTH)
+	{
+		x = -1;
+		while (++x < WIN_WIDTH)
+		{
+			if (y < WIN_HEIGTH / 2)
+				data->buf[y][x] = ceil_color;
+			else
+				data->buf[y][x] = floor_color;
+		}
+	}
 	calc(data);
 	draw(data);
 	key_update(data);
@@ -200,146 +197,80 @@ int	key_update(t_info* data)
 	// front
 	if (data->key.key_w)
 	{
-		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos + data->dirX * data->moveSpeed)] == '0')
-			data->p_xpos += data->dirX * data->moveSpeed;
-			
-			
-		if (data->map[(int)(data->p_ypos + data->dirY * data->moveSpeed)][(int)(data->p_xpos)] == '0')
-			data->p_ypos += data->dirY * data->moveSpeed;
+		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos + data->dirX * MOVE_SPEED)] == '0')
+			data->p_xpos += data->dirX * MOVE_SPEED;
+		if (data->map[(int)(data->p_ypos + data->dirY * MOVE_SPEED)][(int)(data->p_xpos)] == '0')
+			data->p_ypos += data->dirY * MOVE_SPEED;
 	}
 	
 	// back
 	if (data->key.key_s)
 	{
-		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos - data->dirX * data->moveSpeed)] == '0')
-			data->p_xpos -= data->dirX * data->moveSpeed;
-			
-		if (data->map[(int)(data->p_ypos - data->dirY * data->moveSpeed)][(int)(data->p_xpos)] == '0')
-			data->p_ypos -= data->dirY * data->moveSpeed;
+		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos - data->dirX * MOVE_SPEED)] == '0')
+			data->p_xpos -= data->dirX * MOVE_SPEED;
+		if (data->map[(int)(data->p_ypos - data->dirY * MOVE_SPEED)][(int)(data->p_xpos)] == '0')
+			data->p_ypos -= data->dirY * MOVE_SPEED;
 	}
 
 	if (data->key.key_d)
 	{
-		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos + data->planeX * data->moveSpeed)] == '0')
-			
-			data->p_xpos += data->planeX * data->moveSpeed;
-		if (data->map[(int)(data->p_ypos + data->planeY * data->moveSpeed)][(int)(data->p_xpos)] == '0')
-			data->p_ypos += data->planeY * data->moveSpeed;
-		
+		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos + data->planeX * MOVE_SPEED)] == '0')
+			data->p_xpos += data->planeX * MOVE_SPEED;
+		if (data->map[(int)(data->p_ypos + data->planeY * MOVE_SPEED)][(int)(data->p_xpos)] == '0')
+			data->p_ypos += data->planeY * MOVE_SPEED;
 	}
+
 	if (data->key.key_a)
 	{
-		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos - data->planeX * data->moveSpeed)] == '0')
-			data->p_xpos -= data->planeX * data->moveSpeed;
-			
-		if (data->map[(int)(data->p_ypos - data->planeY * data->moveSpeed)][(int)(data->p_xpos)] == '0')
-			data->p_ypos -= data->planeY * data->moveSpeed;
+		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos - data->planeX * MOVE_SPEED)] == '0')
+			data->p_xpos -= data->planeX * MOVE_SPEED;
+		if (data->map[(int)(data->p_ypos - data->planeY * MOVE_SPEED)][(int)(data->p_xpos)] == '0')
+			data->p_ypos -= data->planeY * MOVE_SPEED;
 	}
 
 	if (data->key.key_left)
 	{
 		//both camera direction and camera plane must be rotated
 		double oldDirX = data->dirX;
-		data->dirX = data->dirX * cos(-data->rotSpeed) - data->dirY * sin(-data->rotSpeed);
-		data->dirY = oldDirX * sin(-data->rotSpeed) + data->dirY * cos(-data->rotSpeed);
+		data->dirX = data->dirX * cos(-ROT_SPEED) - data->dirY * sin(-ROT_SPEED);
+		data->dirY = oldDirX * sin(-ROT_SPEED) + data->dirY * cos(-ROT_SPEED);
 
 		double oldPlaneX = data->planeX;
-		data->planeX = data->planeX * cos(-data->rotSpeed) - data->planeY * sin(-data->rotSpeed);
-		data->planeY = oldPlaneX * sin(-data->rotSpeed) + data->planeY * cos(-data->rotSpeed);
+		data->planeX = data->planeX * cos(-ROT_SPEED) - data->planeY * sin(-ROT_SPEED);
+		data->planeY = oldPlaneX * sin(-ROT_SPEED) + data->planeY * cos(-ROT_SPEED);
 	}
-	// left
+	
 	if (data->key.key_right)
 	{
 		//both camera direction and camera plane must be rotated
 		double oldDirX = data->dirX;
-		data->dirX = data->dirX * cos(data->rotSpeed) - data->dirY * sin(data->rotSpeed);
-		data->dirY = oldDirX * sin(data->rotSpeed) + data->dirY * cos(data->rotSpeed);
+		data->dirX = data->dirX * cos(ROT_SPEED) - data->dirY * sin(ROT_SPEED);
+		data->dirY = oldDirX * sin(ROT_SPEED) + data->dirY * cos(ROT_SPEED);
 
 		double oldPlaneX = data->planeX;
-		data->planeX = data->planeX * cos(data->rotSpeed) - data->planeY * sin(data->rotSpeed);
-		data->planeY = oldPlaneX * sin(data->rotSpeed) + data->planeY * cos(data->rotSpeed);
+		data->planeX = data->planeX * cos(ROT_SPEED) - data->planeY * sin(ROT_SPEED);
+		data->planeY = oldPlaneX * sin(ROT_SPEED) + data->planeY * cos(ROT_SPEED);
 	}
-	// if (data->key.K_ESC)
-		// exit(0);
-	printf("%lf %lf\n", data->p_xpos, data->p_ypos);
 	return (0);
 }
-// int	key_update(t_info* data)
-// {
-// 	// front
-// 	if (data->key.key_w)
-// 	{
-// 		if (data->map[(int)(data->p_xpos + data->dirX * data->moveSpeed)][(int)(data->p_ypos)] != '1')
-// 			data->p_xpos += data->dirX * data->moveSpeed;
-// 		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos + data->dirY * data->moveSpeed)] != '1')
-// 			data->p_ypos += data->dirY * data->moveSpeed;
-// 	}
-	
-// 	// back
-// 	if (data->key.key_s)
-// 	{
-// 		if (data->map[(int)(data->p_xpos - data->dirX * data->moveSpeed)][(int)(data->p_ypos)] != '1')
-// 			data->p_xpos -= data->dirX * data->moveSpeed;
-// 		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos - data->dirY * data->moveSpeed)] != '1')
-// 			data->p_ypos -= data->dirY * data->moveSpeed;
-// 	}
-
-// 	if (data->key.key_d)
-// 	{
-// 		if (data->map[(int)(data->p_xpos + data->planeX * data->moveSpeed)][(int)(data->p_ypos)] != '1')
-// 			data->p_xpos += data->planeX * data->moveSpeed;
-// 		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos + data->planeY * data->moveSpeed)] != '1')
-// 			data->p_ypos += data->planeY * data->moveSpeed;
-		
-// 	}
-// 	if (data->key.key_a)
-// 	{
-// 		if (data->map[(int)(data->p_xpos - data->planeX * data->moveSpeed)][(int)(data->p_ypos)] != '1')
-// 			data->p_xpos -= data->planeX * data->moveSpeed;
-// 		if (data->map[(int)(data->p_xpos)][(int)(data->p_ypos - data->planeY * data->moveSpeed)] != '1')
-// 			data->p_ypos -= data->planeY * data->moveSpeed;
-// 	}
-
-// 	if (data->key.key_right)
-// 	{
-// 		//both camera direction and camera plane must be rotated
-// 		double oldDirX = data->dirX;
-// 		data->dirX = data->dirX * cos(-data->rotSpeed) - data->dirY * sin(-data->rotSpeed);
-// 		data->dirY = oldDirX * sin(-data->rotSpeed) + data->dirY * cos(-data->rotSpeed);
-
-// 		double oldPlaneX = data->planeX;
-// 		data->planeX = data->planeX * cos(-data->rotSpeed) - data->planeY * sin(-data->rotSpeed);
-// 		data->planeY = oldPlaneX * sin(-data->rotSpeed) + data->planeY * cos(-data->rotSpeed);
-// 	}
-// 	// left
-// 	if (data->key.key_left)
-// 	{
-// 		//both camera direction and camera plane must be rotated
-// 		double oldDirX = data->dirX;
-// 		data->dirX = data->dirX * cos(data->rotSpeed) - data->dirY * sin(data->rotSpeed);
-// 		data->dirY = oldDirX * sin(data->rotSpeed) + data->dirY * cos(data->rotSpeed);
-
-// 		double oldPlaneX = data->planeX;
-// 		data->planeX = data->planeX * cos(data->rotSpeed) - data->planeY * sin(data->rotSpeed);
-// 		data->planeY = oldPlaneX * sin(data->rotSpeed) + data->planeY * cos(data->rotSpeed);
-// 	}
-// 	// if (data->key.K_ESC)
-// 		// exit(0);
-// 	printf("%lf %lf\n", data->p_xpos, data->p_ypos);
-// 	return (0);
-// }
 
 void	load_image(t_info* data, int *texture, char *path, t_img *img)
 {
+	int	y;
+	int	x;
+
 	img->img = mlx_xpm_file_to_image(data->mlx, path, &img->img_width, &img->img_height);
 	img->data = (int *)mlx_get_data_addr(img->img, &img->bpp, &img->size_l, &img->endian);
-	for (int y = 0; y < img->img_height; y++)
+
+	y = -1;
+	while (++y < img->img_height)
 	{
-		for (int x = 0; x < img->img_width; x++)
+		x = -1;
+		while (++x < img->img_width)
 		{
 			texture[img->img_width * y + x] = img->data[img->img_width * y + x];
 		}
-	}
+	}	
 	mlx_destroy_image(data->mlx, img->img);
 }
 
@@ -397,7 +328,7 @@ int	exit_mlx(t_info *data)
 	int y;
 
 	y = -1;
-	while (++y < data->height)
+	while (++y < data->map_height)
 	{
 		free(data->map[y]);
 	}
@@ -407,15 +338,12 @@ int	exit_mlx(t_info *data)
 
 void	init_vec_data(t_info* data)
 {
+	int i;
+	int j;
+
 	data->mlx = mlx_init();
     if (!data->mlx)
         print_error("mlx NULL Error\n");
-
-    // 초기화 (나중에 삭제)
-    // data->p_xpos = 12;
-    // data->p_ypos = 5;
-	// data->now_dir = 'N';
-	// TODO: delete
 
 	data->key.key_w = 0;
 	data->key.key_s = 0;
@@ -435,47 +363,39 @@ void	init_vec_data(t_info* data)
 		set_east(data);
     else
 		print_error("No search dir");
-	#define texHeight 64
-	#define texWidth 64
-	// 초기화 (나중에 삭제)
-	data->moveSpeed = 0.2;
-	data->rotSpeed = 0.05;
-	data->win_width = 640;
-	data->win_height = 480;
-	// TODO: delete
-	//printf("dirx:%lf diry:%lf planex%lf planey%lf\n", data->dirX, data->dirY, data->planeX, data->planeY);
+
 	// window
 
-
-	if (!(data->texture = (int **)malloc(sizeof(int *) * 4)))
+	data->texture = (int **)malloc(sizeof(int *) * 4);
+	if (!data->texture)
 		exit(1);
-	for (int i = 0; i < 4; i++)
+	i = -1;
+	while (++i < 4)
 	{
-		if (!(data->texture[i] = (int *)malloc(sizeof(int) * (texHeight * texWidth))))
+		data->texture[i] = (int *)malloc(sizeof(int) * (TEXT_HEIGTH * TEXT_WIDTH));
+		if (!data->texture[i])
 			exit(1);
 	}
-	for (int i = 0; i < 4; i++)
+	i = -1;
+	while (++i < 4)
 	{
-		for (int j = 0; j < texHeight * texWidth; j++)
+		j = -1;
+		while (++j < TEXT_HEIGTH * TEXT_WIDTH)
 		{
 			data->texture[i][j] = 0;
 		}
 	}
-
 	load_texture(data);
 
-
-	data->win = mlx_new_window(data->mlx, data->win_width, data->win_height, "cub3D");
+	data->win = mlx_new_window(data->mlx, WIN_WIDTH, WIN_HEIGTH, "cub3D");
 	// exception
 
-	data->img.img = mlx_new_image(data->mlx, data->win_width, data->win_height);
+	data->img.img = mlx_new_image(data->mlx, WIN_WIDTH, WIN_HEIGTH);
 	data->img.data = (int *)mlx_get_data_addr(data->img.img, &data->img.bpp, &data->img.size_l, &data->img.endian);
 	// exception
 
 	mlx_loop_hook(data->mlx, &main_loop, data);
-	
-	//ㅇㅖ쁘게 바바꿔  주주세세요요
-	mlx_hook(data->win, 17, 0, exit_mlx, data);
+	mlx_hook(data->win, X_EVENT_KEY_EXIT, 0, exit_mlx, data);
 	mlx_hook(data->win, X_EVENT_KEY_PRESS, 0, &key_press, data);
 	mlx_hook(data->win, X_EVENT_KEY_RELEASE, 0, &key_release, data);
 

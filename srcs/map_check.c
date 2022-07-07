@@ -2,7 +2,7 @@
 
 void	bst(t_info *data, t_queue *head, int x, int y)
 {
-	if (y < 0 || y >= data->height || x < 0 || x >= data->width)
+	if (y < 0 || y >= data->map_height || x < 0 || x >= data->map_width)
 		return ;
 	if (data->visited[y][x] == 1)
 		return ;
@@ -10,7 +10,7 @@ void	bst(t_info *data, t_queue *head, int x, int y)
 		return ;
 	if (data->map[y][x] == '0')
 	{
-		if (y == 0 || y == data->height - 1 || x == 0 || x == data->width - 1)
+		if (y == 0 || y == data->map_height - 1 || x == 0 || x == data->map_width - 1)
 			print_error("map isn't surrounded by 1\n");
 		data->visited[y][x] = 1;
 		enqueue(&head, x, y);
@@ -24,17 +24,17 @@ void	visitied_init(t_info *data)
 	int	y;
 	int	x;
 
-	data->visited = (int **)malloc(sizeof(int *) * data->height);
+	data->visited = (int **)malloc(sizeof(int *) * data->map_height);
 	y = -1;
-	while (++y < data->height)
+	while (++y < data->map_height)
 	{
-		data->visited[y] = (int *)malloc(sizeof(int) * data->width);
+		data->visited[y] = (int *)malloc(sizeof(int) * data->map_width);
 	}
 	y = -1;
-	while (++y < data->height)
+	while (++y < data->map_height)
 	{
 		x = -1;
-		while (++x < data->width)
+		while (++x < data->map_width)
 			data->visited[y][x] = 0;
 	}
 }
@@ -44,7 +44,7 @@ void	free_visited(t_info *data)
 	int	y;
 
 	y = -1;
-	while (++y < data->height)
+	while (++y < data->map_height)
 	{
 		free(data->visited[y]);
 	}
@@ -67,6 +67,5 @@ void	map_check(t_info *data)
 		bst(data, head, head->x, head->y + 1);
 		dequeue(&head);
 	}
-	data->surround = 1;
 	free_visited(data);
 }

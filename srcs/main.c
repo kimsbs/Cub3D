@@ -9,8 +9,8 @@ void	check_info(t_info data)
 	printf("%s\n", data.tile[3]);
 	printf("floor : %d,%d,%d\n", data.floor[0], data.floor[1], data.floor[2]);
 	printf("celing : %d,%d,%d\n", data.celing[0], data.celing[1], data.celing[1]);
-	printf("height : %d width : %d\n", data.height, data.width);
-	for (int i = 0 ; i < data.height ; i++)
+	printf("height : %d width : %d\n", data.map_height, data.map_width);
+	for (int i = 0 ; i < data.map_height ; i++)
 		printf("%s\n", data.map[i]);
 }
 
@@ -22,7 +22,7 @@ void	free_all_data(t_info data)
 	while (++i < 4)
 		free(data.tile[i]);
 	i = -1;
-	while (++i < data.height)
+	while (++i < data.map_height)
 		free(data.map[i]);
 	free(data.map);
 }

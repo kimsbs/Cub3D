@@ -16,10 +16,10 @@ void	check_map(t_info *data, int cnt)
 	char	c;
 
 	y = -1;
-	while (++y < data->height)
+	while (++y < data->map_height)
 	{
 		x = -1;
-		while (++x < data->width)
+		while (++x < data->map_width)
 		{
 			c = data->map[y][x];
 			if (c == ' ' || c == '0' || c == '1' || c == 'W'\
@@ -48,7 +48,6 @@ void	mapdata_to_info(char *tmp, t_info *data)
 	// map 할당
 	alloc_map(tmp, data);
 	free(tmp);
-	data->surround = -1;
 	check_map(data, 0);
 	map_check(data);
 }
