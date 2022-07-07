@@ -25,8 +25,8 @@
 
 #define MOVE_SPEED 0.05
 #define ROT_SPEED 0.05
-#define WIN_WIDTH 640
-#define WIN_HEIGTH 480
+#define WIN_WIDTH 1600
+#define WIN_HEIGTH 900
 
 typedef struct s_queue{
     int x;
@@ -76,7 +76,7 @@ typedef struct s_info{
 	int     celing[4];
 
 	// 내껏 헤
-	int		buf[480][640];
+	int		buf[WIN_HEIGTH][WIN_WIDTH];
 	int		**texture;
 	t_img		img;
 	t_key		key;
@@ -115,7 +115,7 @@ void	enqueue(t_queue **head, int x, int y);
 char    *ft_strdup(const char *str);
 char    *ft_strndup(const char *str, int n);
 char	*ft_strjoin(char const *s1, char const *s2);
-t_info	init_data(int fd);
+t_info	*init_data(int fd);
 t_queue	*get_last(t_queue *head);
 
 void	init_vec_data(t_info *data);

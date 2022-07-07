@@ -52,13 +52,16 @@ void	mapdata_to_info(char *tmp, t_info *data)
 	map_check(data);
 }
 
-t_info	init_data(int fd)
+t_info*	init_data(int fd)
 {
-	t_info	data;
+	t_info	*data;
 	char	buf[129];
 	char	*tmp;
 	int		rd_len;
 
+	data = (t_info *)malloc(sizeof(t_info));
+	if (!data)
+		print_error("malloc error\n");
 	tmp = NULL;
 	rd_len = read(fd, buf, 128);
 	while (rd_len > 0)
@@ -68,6 +71,6 @@ t_info	init_data(int fd)
 		tmp = ft_strjoin(tmp, buf);
 		rd_len = read(fd, buf, 128);
 	}
-	mapdata_to_info(tmp, &data);
+	mapdata_to_info(tmp, data);
 	return (data);
 }

@@ -23,7 +23,7 @@ void	calc(t_info *data)
 		double sideDistY;
 		double sideDistX;
 		
-		 //length of ray from one x or y-side to next x or y-side
+		//length of ray from one x or y-side to next x or y-side
 		double deltaDistY = fabs(1 / rayDirY);
 		double deltaDistX = fabs(1 / rayDirX);
 		

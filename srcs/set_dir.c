@@ -4,7 +4,6 @@ void set_north(t_info* data)
 {
     data->dirX = 0.0;
     data->dirY = -1.0;
-    
     data->planeX = 0.66;
     data->planeY = 0.0;
 }
