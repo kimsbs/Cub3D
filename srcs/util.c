@@ -4,10 +4,10 @@
 
 int	create_trgb(int t, int r, int g, int b)
 {
-	int trgb;
+	int	trgb;
 
-	trgb = t << 24 | r << 16 | g << 8 | b;
-    return (trgb);
+	trgb = (t << 24) | (r << 16) | (g << 8) | b;
+	return (trgb);
 }
 
 void	print_error(const char *str)
