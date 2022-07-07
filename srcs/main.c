@@ -40,8 +40,7 @@ int	main(int argc, char **argv)
 	data = init_data(fd);
 	close(fd);
 	check_info(data);
-	//Add my function
-	init_vec_data(data);
+	start_mlx(data);
 	free_all_data(data);
 	return (0);
 }
