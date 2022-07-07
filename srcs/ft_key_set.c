@@ -42,38 +42,13 @@ int	key_update(t_info *data)
 {
 	// front
 	if (data->key.key_w)
-	{
-		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos + data->dirX * MOVE_SPEED)] == '0')
-			data->p_xpos += data->dirX * MOVE_SPEED;
-		if (data->map[(int)(data->p_ypos + data->dirY * MOVE_SPEED)][(int)(data->p_xpos)] == '0')
-			data->p_ypos += data->dirY * MOVE_SPEED;
-	}
-	
-	// back
+		update_w(data);
 	if (data->key.key_s)
-	{
-		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos - data->dirX * MOVE_SPEED)] == '0')
-			data->p_xpos -= data->dirX * MOVE_SPEED;
-		if (data->map[(int)(data->p_ypos - data->dirY * MOVE_SPEED)][(int)(data->p_xpos)] == '0')
-			data->p_ypos -= data->dirY * MOVE_SPEED;
-	}
-
+		update_s(data);
 	if (data->key.key_d)
-	{
-		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos + data->planeX * MOVE_SPEED)] == '0')
-			data->p_xpos += data->planeX * MOVE_SPEED;
-		if (data->map[(int)(data->p_ypos + data->planeY * MOVE_SPEED)][(int)(data->p_xpos)] == '0')
-			data->p_ypos += data->planeY * MOVE_SPEED;
-	}
-
+		update_d(data);
 	if (data->key.key_a)
-	{
-		if (data->map[(int)(data->p_ypos)][(int)(data->p_xpos - data->planeX * MOVE_SPEED)] == '0')
-			data->p_xpos -= data->planeX * MOVE_SPEED;
-		if (data->map[(int)(data->p_ypos - data->planeY * MOVE_SPEED)][(int)(data->p_xpos)] == '0')
-			data->p_ypos -= data->planeY * MOVE_SPEED;
-	}
-
+		update_a(data);
 	if (data->key.key_left)
 	{
 		//both camera direction and camera plane must be rotated
