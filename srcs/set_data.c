@@ -218,7 +218,7 @@ int	exit_mlx(t_info *data)
 	exit (0);
 }
 
-void	init_vec_data(t_info *data)
+void	start_mlx(t_info *data)
 {
 	data->mlx = mlx_init();
 	if (!data->mlx)
