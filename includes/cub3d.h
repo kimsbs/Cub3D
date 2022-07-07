@@ -84,15 +84,12 @@ typedef struct s_info{
 	void*		win;
 	int			win_width;
 	int			win_height;
-	double		dirX;
-	double		dirY;
-	double		planeX;
-	double		planeY;
+	double		dir_x;
+	double		dir_y;
+	double		plane_x;
+	double		plane_y;
 
 	char		now_dir;
-
-	double		moveSpeed;
-	double		rotSpeed;
 }           	t_info;
 
 int     ft_strlen(const char *str);
@@ -123,6 +120,27 @@ void	set_north(t_info* data);
 void	set_south(t_info* data);
 void	set_east(t_info* data);
 void	set_west(t_info* data);
+void    set_dir_with_vec(t_info* data);
 void	print_error(const char * str);
+
+
+// key
+int	key_press(int key, t_info *data);
+int	key_release(int key, t_info *data);
+int	key_update(t_info* data);
+void	init_key_false(t_info* data);
+
+// key_alpha
+void	update_w(t_info *data);
+void	update_s(t_info *data);
+void	update_a(t_info *data);
+void	update_d(t_info *data);
+
+// key_arrow
+void ft_key_arrow_left(t_info *data);
+void ft_key_arrow_right(t_info *data);
+
+//tex
+void	ft_texture_init(t_info *data);
 
 #endif
