@@ -2,13 +2,14 @@ NAME = cub3D
 SRCS = srcs/get_map.c srcs/main.c srcs/ft_func1.c srcs/ft_func2.c	\
 		srcs/map_tile.c	srcs/map_input.c srcs/map_check.c srcs/map_fc.c\
 		srcs/ft_queue.c		\
-		srcs/set_data.c		\
 		srcs/set_dir.c		\
 		srcs/util.c			\
 		srcs/ft_key_set.c	\
 		srcs/ft_key_alpha.c	\
 		srcs/ft_key_arrow.c	\
 		srcs/ft_tex_init.c	\
+		srcs/ft_raycast.c	\
+		srcs/ft_main_mlx.c	\
 
 MLX = mlx
 
