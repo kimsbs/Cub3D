@@ -25,10 +25,14 @@ void	visitied_init(t_info *data)
 	int	x;
 
 	data->visited = (int **)malloc(sizeof(int *) * data->map_height);
+	if (!data->visited)
+		print_error("malloc error\n");
 	y = -1;
 	while (++y < data->map_height)
 	{
 		data->visited[y] = (int *)malloc(sizeof(int) * data->map_width);
+		if (!data->visited[y])
+			print_error("malloc error\n");
 	}
 	y = -1;
 	while (++y < data->map_height)
@@ -57,7 +61,7 @@ void	map_check(t_info *data)
 
 	visitied_init(data);
 	head = NULL;
-	data->visited[(int)(data->p_ypos + 0.5)][(int)(data->p_xpos + 0.5)] = 1;
+	data->visited[(int)(data->p_ypos + 0.1)][(int)(data->p_xpos + 0.1)] = 1;
 	enqueue(&head, data->p_xpos, data->p_ypos);
 	while (head)
 	{

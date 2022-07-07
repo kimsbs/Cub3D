@@ -260,6 +260,8 @@ void	load_image(t_info* data, int *texture, char *path, t_img *img)
 	int	x;
 
 	img->img = mlx_xpm_file_to_image(data->mlx, path, &img->img_width, &img->img_height);
+	if (!img->img)
+		print_error("Img load fail\n");
 	img->data = (int *)mlx_get_data_addr(img->img, &img->bpp, &img->size_l, &img->endian);
 
 	y = -1;
