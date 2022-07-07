@@ -54,3 +54,13 @@ int	key_update(t_info *data)
 		ft_key_arrow_right(data);
 	return (0);
 }
+
+void	init_key_false(t_info *data)
+{
+	data->key.key_w = 0;
+	data->key.key_s = 0;
+	data->key.key_a = 0;
+	data->key.key_d = 0;
+	data->key.key_left = 0;
+	data->key.key_right = 0;
+}
