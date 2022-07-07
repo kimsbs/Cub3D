@@ -40,7 +40,6 @@ int	key_release(int key, t_info *data)
 
 int	key_update(t_info *data)
 {
-	// front
 	if (data->key.key_w)
 		update_w(data);
 	if (data->key.key_s)
@@ -50,27 +49,8 @@ int	key_update(t_info *data)
 	if (data->key.key_a)
 		update_a(data);
 	if (data->key.key_left)
-	{
-		//both camera direction and camera plane must be rotated
-		double oldDirX = data->dirX;
-		data->dirX = data->dirX * cos(-ROT_SPEED) - data->dirY * sin(-ROT_SPEED);
-		data->dirY = oldDirX * sin(-ROT_SPEED) + data->dirY * cos(-ROT_SPEED);
-
-		double oldPlaneX = data->planeX;
-		data->planeX = data->planeX * cos(-ROT_SPEED) - data->planeY * sin(-ROT_SPEED);
-		data->planeY = oldPlaneX * sin(-ROT_SPEED) + data->planeY * cos(-ROT_SPEED);
-	}
-	
+		ft_key_arrow_left(data);
 	if (data->key.key_right)
-	{
-		//both camera direction and camera plane must be rotated
-		double oldDirX = data->dirX;
-		data->dirX = data->dirX * cos(ROT_SPEED) - data->dirY * sin(ROT_SPEED);
-		data->dirY = oldDirX * sin(ROT_SPEED) + data->dirY * cos(ROT_SPEED);
-
-		double oldPlaneX = data->planeX;
-		data->planeX = data->planeX * cos(ROT_SPEED) - data->planeY * sin(ROT_SPEED);
-		data->planeY = oldPlaneX * sin(ROT_SPEED) + data->planeY * cos(ROT_SPEED);
-	}
+		ft_key_arrow_right(data);
 	return (0);
 }
