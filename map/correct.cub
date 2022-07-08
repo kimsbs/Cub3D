@@ -1,14 +1,14 @@
+C 0,0,1
+
 NO ./img/bluestone.xpm
 
 SO ./img/colorstone.xpm
 
 WE ./img/eagle.xpm
 
+F               255,255,255
+
 EA ./img/wood.xpm
-
-F 255,255,255
-
-C 0,0,1
 
 1111111111
 11100000000

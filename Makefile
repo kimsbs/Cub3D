@@ -17,18 +17,18 @@ MLX_lib = -Lmlx -lmlx -framework OpenGL -framework AppKit
 
 INCLUDES = -I includes -I $(MLX)
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror
 
 OBJS = $(SRCS:.c=.o)
 
 %.o: %.c
-	gcc $(CFLAGS) -c $< -o $@ $(INCLUDES)
+	cc $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 all: $(NAME)
 
 $(NAME) : $(OBJS)
 	@make -C $(MLX)
-	gcc $(CFLAGS) -o $@ $(MLX_lib) $(OBJS)
+	cc $(CFLAGS) -o $@ $(MLX_lib) $(OBJS)
 
 clean:
 	rm -f $(OBJS)
@@ -37,4 +37,8 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	
-re: fclean all
+re: 
+	make fclean
+	make all
+
+.PHONY: all clean fclean re
