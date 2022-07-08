@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seungyki <seungyki@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/08 11:23:46 by seungyki          #+#    #+#             */
+/*   Updated: 2022/07/08 11:25:24 by seungyki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -5,9 +17,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
-# include <stdio.h> // 나중에 삭제할것
 
-//ㅈㅓㅇ리
 # define K_A 0
 # define K_D 2
 # define K_S 1
@@ -139,40 +149,34 @@ void	set_east(t_info *data);
 void	set_west(t_info *data);
 void	set_dir_with_vec(t_info *data);
 
-// util
 int		create_trgb(int t, int r, int g, int b);
 void	print_error(const char *str);
 
-// key
 int		key_press(int key, t_info *data);
 int		key_release(int key, t_info *data);
 int		key_update(t_info *data);
 void	init_key_false(t_info *data);
 
-// key_alpha
 void	update_w(t_info *data);
 void	update_s(t_info *data);
 void	update_a(t_info *data);
 void	update_d(t_info *data);
 
-// key_arrow
 void	ft_key_arrow_left(t_info *data);
 void	ft_key_arrow_right(t_info *data);
 
-//tex
 void	ft_texture_init(t_info *data);
 
-// ft_raycast.c
 void	set_side_and_sidedist(t_ray *ray, t_info *data);
 void	set_vector_and_dist(t_ray *ray, t_info *data, int x);
 void	test(t_ray *ray, t_info *data);
 void	test1(t_ray *ray);
 void	set_buf_value(t_info *data, t_ray *ray, int x);
 
-// main_mlx
 int		exit_mlx(t_info *data);
 void	start_mlx(t_info *data);
 void	raycast(t_info *data);
 void	draw(t_info *data);
 int		main_loop(t_info *data);
+
 #endif
