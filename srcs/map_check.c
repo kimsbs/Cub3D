@@ -1,6 +1,18 @@
-# include "../includes/cub3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_check.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seungyki <seungyki@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/08 11:12:12 by seungyki          #+#    #+#             */
+/*   Updated: 2022/07/08 11:19:10 by seungyki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	bst(t_info *data, t_queue *head, int x, int y)
+#include "../includes/cub3d.h"
+
+void	bfs(t_info *data, t_queue *head, int x, int y)
 {
 	if (y < 0 || y >= data->map_height || x < 0 || x >= data->map_width)
 		return ;
@@ -10,7 +22,8 @@ void	bst(t_info *data, t_queue *head, int x, int y)
 		return ;
 	if (data->map[y][x] == '0')
 	{
-		if (y == 0 || y == data->map_height - 1 || x == 0 || x == data->map_width - 1)
+		if (y == 0 || y == data->map_height - 1 \
+				|| x == 0 || x == data->map_width - 1)
 			print_error("map isn't surrounded by 1\n");
 		data->visited[y][x] = 1;
 		enqueue(&head, x, y);
@@ -65,10 +78,10 @@ void	map_check(t_info *data)
 	enqueue(&head, data->p_xpos, data->p_ypos);
 	while (head)
 	{
-		bst(data, head, head->x - 1, head->y);
-		bst(data, head, head->x, head->y - 1);
-		bst(data, head, head->x + 1, head->y);
-		bst(data, head, head->x, head->y + 1);
+		bfs(data, head, head->x - 1, head->y);
+		bfs(data, head, head->x, head->y - 1);
+		bfs(data, head, head->x + 1, head->y);
+		bfs(data, head, head->x, head->y + 1);
 		dequeue(&head);
 	}
 	free_visited(data);

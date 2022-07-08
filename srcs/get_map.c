@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_map.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seungyki <seungyki@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/08 11:11:56 by seungyki          #+#    #+#             */
+/*   Updated: 2022/07/08 11:14:51 by seungyki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	position_alloc(t_info *data, int y, int x, int *cnt)
@@ -39,20 +51,16 @@ void	check_map(t_info *data, int cnt)
 
 void	mapdata_to_info(char *tmp, t_info *data)
 {
-	//타일 종류별 할당
 	alloc_tile(&tmp, data);
-	//천장 바닥 색상할당
 	alloc_fc(&tmp, data);
-	// map의 width height 계산
 	get_map_info(tmp, data);
-	// map 할당
 	alloc_map(tmp, data);
 	free(tmp);
 	check_map(data, 0);
 	map_check(data);
 }
 
-t_info*	init_data(int fd)
+t_info	*init_data(int fd)
 {
 	t_info	*data;
 	char	buf[129];
@@ -67,7 +75,6 @@ t_info*	init_data(int fd)
 	while (rd_len > 0)
 	{
 		buf[rd_len] = '\0';
-		// add buf to tmp
 		tmp = ft_strjoin(tmp, buf);
 		rd_len = read(fd, buf, 128);
 	}

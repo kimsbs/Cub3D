@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_tile.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seungyki <seungyki@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/08 11:12:45 by seungyki          #+#    #+#             */
+/*   Updated: 2022/07/08 11:19:36 by seungyki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	put_tile_data(char **tmp, t_info *data, int type)
@@ -13,11 +25,9 @@ void	put_tile_data(char **tmp, t_info *data, int type)
 	enter_len = 0;
 	while (dummy[space_len + enter_len] && dummy[space_len + enter_len] != '\n')
 		enter_len++;
-	//space 이후 STRING -> 복사 후 tile에 저장
 	data->tile[type] = ft_strndup(dummy + space_len, enter_len);
 	if (!data->tile[type])
 		print_error("tile alloc\n");
-	//'\n'이후 의 거시기 복사.
 	dummy = ft_strdup(*tmp + space_len + enter_len + 1);
 	free(*tmp);
 	*tmp = dummy;
