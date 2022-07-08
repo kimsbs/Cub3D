@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungyki <seungyki@42.fr>                  +#+  +:+       +#+        */
+/*   By: hena <hena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:23:46 by seungyki          #+#    #+#             */
-/*   Updated: 2022/07/08 11:25:24 by seungyki         ###   ########.fr       */
+/*   Updated: 2022/07/08 11:44:57 by hena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,8 +169,8 @@ void	ft_texture_init(t_info *data);
 
 void	set_side_and_sidedist(t_ray *ray, t_info *data);
 void	set_vector_and_dist(t_ray *ray, t_info *data, int x);
-void	test(t_ray *ray, t_info *data);
-void	test1(t_ray *ray);
+void	dda_algorithm(t_ray *ray, t_info *data);
+void	set_texture_number(t_ray *ray);
 void	set_buf_value(t_info *data, t_ray *ray, int x);
 
 int		exit_mlx(t_info *data);

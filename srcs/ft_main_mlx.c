@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_main_mlx.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungyki <seungyki@42.fr>                  +#+  +:+       +#+        */
+/*   By: hena <hena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:44 by seungyki          #+#    #+#             */
-/*   Updated: 2022/07/08 11:10:45 by seungyki         ###   ########.fr       */
+/*   Updated: 2022/07/08 11:46:03 by hena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	raycast(t_info *data)
 		set_vector_and_dist(&ray, data, x);
 		ray.hit = 0;
 		set_side_and_sidedist(&ray, data);
-		test(&ray, data);
+		dda_algorithm(&ray, data);
 		ray.line_height = (int)(WIN_HEIGTH / ray.wall_dist);
 		ray.draw_start_pos = -ray.line_height / 2 + WIN_HEIGTH / 2;
 		if (ray.draw_start_pos < 0)
@@ -64,7 +64,7 @@ void	raycast(t_info *data)
 		ray.draw_end_pos = ray.line_height / 2 + WIN_HEIGTH / 2;
 		if (ray.draw_end_pos >= WIN_HEIGTH)
 			ray.draw_end_pos = WIN_HEIGTH - 1;
-		test1(&ray);
+		set_texture_number(&ray);
 		set_buf_value(data, &ray, x);
 	}
 }

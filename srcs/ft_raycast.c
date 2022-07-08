@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_raycast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungyki <seungyki@42.fr>                  +#+  +:+       +#+        */
+/*   By: hena <hena@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:11:44 by seungyki          #+#    #+#             */
-/*   Updated: 2022/07/08 11:11:45 by seungyki         ###   ########.fr       */
+/*   Updated: 2022/07/08 11:46:04 by hena             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	set_vector_and_dist(t_ray *ray, t_info *data, int x)
 	ray->delta_dist_x = fabs(1 / ray->ray_dir_x);
 }
 
-void	test(t_ray *ray, t_info *data)
+void	dda_algorithm(t_ray *ray, t_info *data)
 {
 	while (ray->hit == 0)
 	{
@@ -79,7 +79,7 @@ void	test(t_ray *ray, t_info *data)
 			(1 - ray->step_y) / 2) / ray->ray_dir_y;
 }
 
-void	test1(t_ray *ray)
+void	set_texture_number(t_ray *ray)
 {
 	if (ray->side == 1 && ray->ray_dir_y < 0)
 		ray->tex_number = 0;
