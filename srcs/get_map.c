@@ -6,7 +6,7 @@
 /*   By: seungyki <seungyki@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:11:56 by seungyki          #+#    #+#             */
-/*   Updated: 2022/07/08 11:14:51 by seungyki         ###   ########.fr       */
+/*   Updated: 2022/07/08 11:36:58 by seungyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	position_alloc(t_info *data, int y, int x, int *cnt)
 {
 	data->now_dir = data->map[y][x];
 	data->map[y][x] = '0';
-	data->p_ypos = y + 0.5;
-	data->p_xpos = x + 0.5;
+	data->p_ypos = y + 0.12345678901234567;
+	data->p_xpos = x + 0.12345678901234567;
 	(*cnt)++;
 }
 
