@@ -57,6 +57,7 @@ void	put_fc_data(char **tmp, int data[3])
 	dummy = ft_strdup(*tmp + space_len + enter_len + 1);
 	free(*tmp);
 	*tmp = dummy;
+	data[3] = 1;
 }
 
 void	fc_init(t_info *data)
@@ -68,33 +69,6 @@ void	fc_init(t_info *data)
 	{
 		data->floor[cnt] = -1;
 		data->celing[cnt] = -1;
-	}
-}
-
-void	alloc_fc(char **tmp, t_info *data)
-{
-	int	cnt;
-
-	fc_init(data);
-	cnt = -1;
-	while (++cnt < 2 && *tmp[0])
-	{
-		if (*tmp[0] == '\n')
-		{
-			--cnt;
-			remove_enter(tmp);
-		}
-		else if (*tmp[0] == 'F' && data->floor[3] == -1)
-		{
-			put_fc_data(tmp, data->floor);
-			data->floor[3] = 1;
-		}
-		else if (*tmp[0] == 'C' && data->celing[3] == -1)
-		{
-			put_fc_data(tmp, data->celing);
-			data->celing[3] = 1;
-		}
-		else
-			print_error("color\n");
+		data->tile[cnt] = 0;
 	}
 }

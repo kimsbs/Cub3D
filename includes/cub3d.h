@@ -128,13 +128,14 @@ void	alloc_tile(char **tmp, t_info *data);
 void	put_fc_data(char **tmp, int data[3]);
 void	cpy_map(const char *tmp, t_info *data);
 void	alloc_map(const char *tmp, t_info *data);
-void	alloc_fc(char **tmp, t_info *data);
+void	put_fc_data(char **tmp, int data[3]);
+void	fc_init(t_info *data);
 void	get_map_info(const char *tmp, t_info *data);
 void	put_tile_data(char **tmp, t_info *data, int type);
 void	we_just_do_same_things(char **tmp, char *dummy, \
 	int space_len, int enter_len);
 void	map_check(t_info *data);
-void	remove_enter(char **tmp);
+void	remove_enter(char **tmp, int *cnt);
 void	dequeue(t_queue **head);
 void	enqueue(t_queue **head, int x, int y);
 char	*ft_strdup(const char *str);

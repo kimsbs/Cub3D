@@ -52,7 +52,6 @@ void	check_map(t_info *data, int cnt)
 void	mapdata_to_info(char *tmp, t_info *data)
 {
 	alloc_tile(&tmp, data);
-	alloc_fc(&tmp, data);
 	get_map_info(tmp, data);
 	alloc_map(tmp, data);
 	free(tmp);

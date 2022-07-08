@@ -33,30 +33,26 @@ void	put_tile_data(char **tmp, t_info *data, int type)
 	*tmp = dummy;
 }
 
-void	remove_enter(char **tmp)
+void	remove_enter(char **tmp, int *cnt)
 {
 	char	*dummy;
 
 	dummy = ft_strdup(*tmp + 1);
 	free(*tmp);
 	*tmp = dummy;
+	*cnt -= 1;
 }
 
 void	alloc_tile(char **tmp, t_info *data)
 {
 	int	cnt;
 
-	cnt = -1;
-	while (++cnt < 4)
-		data->tile[cnt] = 0;
-	cnt = -1;
-	while (++cnt < 4)
+	fc_init(data);
+	cnt = 0;
+	while (cnt < 6 && *tmp[0])
 	{
 		if (*tmp[0] == '\n')
-		{
-			--cnt;
-			remove_enter(tmp);
-		}
+			remove_enter(tmp, &cnt);
 		else if (ft_strncmp(*tmp, "NO", 2) && !data->tile[0])
 			put_tile_data(tmp, data, 0);
 		else if (ft_strncmp(*tmp, "SO", 2) && !data->tile[1])
@@ -65,7 +61,12 @@ void	alloc_tile(char **tmp, t_info *data)
 			put_tile_data(tmp, data, 2);
 		else if (ft_strncmp(*tmp, "EA", 2) && !data->tile[3])
 			put_tile_data(tmp, data, 3);
+		else if (ft_strncmp(*tmp, "F", 1) && data->floor[3] == -1)
+			put_fc_data(tmp, data->floor);
+		else if (ft_strncmp(*tmp, "C", 1) && data->celing[3] == -1)
+			put_fc_data(tmp, data->celing);
 		else
-			print_error("tile data\n");
+			print_error(".cub data\n");
+		cnt++;
 	}
 }
